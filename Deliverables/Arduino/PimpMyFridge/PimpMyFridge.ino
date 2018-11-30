@@ -27,14 +27,14 @@
 // Constants Setup ///////////////////////////////////////////////////////////////////////
 
 
-double coeffAinside = 0;
-double coeffBinside = 0;
-double coeffCinside = 0;
-double termistorInside = 0;
-double coeffAoutside = 0;
-double coeffBoutside = 0;
-double coeffCoutside = 0;
-double termistorOutside = 0;
+double coeffAinside = 1.12902*pow(10,-3);
+double coeffBinside = 2.3418*pow(10,-4);
+double coeffCinside = 8.7264*pow(10,-8);
+double resistanceInside = 9910;
+double coeffAoutside = 1.12902*pow(10,-3);
+double coeffBoutside = 2.3418*pow(10,-4);
+double coeffCoutside = 8.7264*pow(10,-8);
+double resistanceOutside = 9910;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -80,8 +80,9 @@ void loop()
 
 // Get all the inputs on the Arduno (Sensor, ...)
 void getInputs(){   
-    sprintf(inputs, "SS:%03X:%c", // sprintf the string in the inputs array
+    sprintf(inputs, "SS:%03X:%03X:%c", // sprintf the string in the inputs array
         analogRead(pinTemperaturePeltier), // Analog Read on pin...
+        analogRead(pinTemperatureOutside), // Analog Read on pin...
         digitalRead(pinOpenDetector) // Digital Read on pin...
       // ...
     );
