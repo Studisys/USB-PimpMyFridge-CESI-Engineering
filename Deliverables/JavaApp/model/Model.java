@@ -14,9 +14,27 @@ public class Model {
 	private boolean isDoorOpen; // Boolean : is fridge door open ?
 	private boolean isCondensation; // Boolean : is there a risk for condensation ?
 	private boolean isTempAnomaly; // Boolean : is there an abnormal temperature ?
-	
+
+	private boolean isAutoPilot; // Boolean : should the Arduino auto manage temperature or not ?
 	// ==== METHODS ========
 	
+	////////////: SETTERS
+	
+	// Set the target temperature
+	public void setTargetTemp(int targetTemp) {
+		this.targetTemp = targetTemp;
+	}
+	
+	// Set AutoPilot Mode for Arduino
+	public void setAutoPilot(boolean isAutoPilot)
+	{
+		this.isAutoPilot = isAutoPilot;
+	}
+	
+	
+	/////////////    GETTERS
+	
+	// Get the target temperature
 	public double getTargetTemperature()
 	{
 		return targetTemp;
@@ -66,4 +84,6 @@ public class Model {
 	{
 		return isTempAnomaly;
 	}
+	
+	
 }
