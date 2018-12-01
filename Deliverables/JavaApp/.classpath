@@ -5,5 +5,11 @@
 	<classpathentry kind="src" path="view"/>
 	<classpathentry kind="src" path="model"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/jdidier/Documents/GitHub/USB-PimpMyFridge-CESI-Engineering/Deliverables/JavaApp/lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jdidier/Documents/GitHub/USB-PimpMyFridge-CESI-Engineering/Deliverables/JavaApp/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jdidier/Documents/GitHub/USB-PimpMyFridge-CESI-Engineering/Deliverables/JavaApp/lib/jfreechart-1.0.19-swt.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jdidier/Documents/GitHub/USB-PimpMyFridge-CESI-Engineering/Deliverables/JavaApp/lib/rxtxcomm/RXTXcomm.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jdidier/Documents/GitHub/USB-PimpMyFridge-CESI-Engineering/Deliverables/JavaApp/lib/rxtxcomm/rxtxParallel.dll"/>
+	<classpathentry kind="lib" path="C:/Users/jdidier/Documents/GitHub/USB-PimpMyFridge-CESI-Engineering/Deliverables/JavaApp/lib/rxtxcomm/rxtxSerial.dll"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
