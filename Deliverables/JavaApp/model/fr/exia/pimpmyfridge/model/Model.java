@@ -1,4 +1,5 @@
-
+package fr.exia.pimpmyfridge.model;
+@SuppressWarnings("unused")
 public class Model {
 
 	
@@ -26,15 +27,40 @@ public class Model {
 	
 	// Set the target temperature
 	public void setTargetTemp(int targetTemp) {
-		System.out.println("New Target Temp :" + targetTemp);
 		this.targetTemp = targetTemp;
+		System.out.println("New Target Temp :" + targetTemp);
 	}
+	
+	// Set the humidity value
+	public void setHumidity(double humidity) {
+		this.humidity = humidity;
+		System.out.println("New Humidity :" + humidity);
+	}
+	
+	// Set the Peltier Temperature value
+	public void setTempPeltier(double tempPeltier) {
+		this.tempPeltier = tempPeltier;
+		System.out.println("Peltier Temperature :" + tempPeltier);
+	}
+	
+	// Set the Outside Temperature value
+	public void setTempOutside(double tempOutside) {
+		this.tempOutside = tempOutside;
+		System.out.println("Outside Temperature :" + tempOutside);
+	}
+	
+	// Set the DHT Temperature value
+	public void setTempDHT(double tempDHT) {
+		this.tempDHT = tempDHT;
+		System.out.println("DHT Temperature :" + tempOutside);
+	}
+	
 	
 	// Set AutoPilot Mode for Arduino
 	public void setAutoPilot(boolean isAutoPilot)
 	{
-		System.out.println("AutoPilot Status :" + isAutoPilot);
 		this.isAutoPilot = isAutoPilot;
+		System.out.println("AutoPilot Status :" + isAutoPilot);
 	}
 	
 	

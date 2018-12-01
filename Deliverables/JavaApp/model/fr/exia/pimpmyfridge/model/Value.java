@@ -1,3 +1,4 @@
+package fr.exia.pimpmyfridge.model;
 
 public class Value {
 	
@@ -13,10 +14,8 @@ public class Value {
 	}
 	
 	
-	
 	public float getNumber() {
 		return number;
 	}
 
-	
 }
