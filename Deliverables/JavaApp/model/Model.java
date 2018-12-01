@@ -16,18 +16,22 @@ public class Model {
 	private boolean isTempAnomaly; // Boolean : is there an abnormal temperature ?
 
 	private boolean isAutoPilot; // Boolean : should the Arduino auto manage temperature or not ?
+	
+	
 	// ==== METHODS ========
 	
 	////////////: SETTERS
 	
 	// Set the target temperature
 	public void setTargetTemp(int targetTemp) {
+		System.out.println("New Target Temp :" + targetTemp);
 		this.targetTemp = targetTemp;
 	}
 	
 	// Set AutoPilot Mode for Arduino
 	public void setAutoPilot(boolean isAutoPilot)
 	{
+		System.out.println("AutoPilot Status :" + isAutoPilot);
 		this.isAutoPilot = isAutoPilot;
 	}
 	
