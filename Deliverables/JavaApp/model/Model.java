@@ -18,6 +18,8 @@ public class Model {
 	private boolean isAutoPilot; // Boolean : should the Arduino auto manage temperature or not ?
 	
 	
+	private Database DB = new Database(); // Declare the Database Object named DB
+	
 	// ==== METHODS ========
 	
 	////////////: SETTERS
