@@ -1,5 +1,3 @@
-
-
 // Notable Characteristics ///////////////////////////////////////////////////////////////
 // - The DHT-22 sampling rate is 0.5Hz, so be sure to delay by 2000ms between measures
 // - The Next Big Thing Is This Fridge
@@ -18,8 +16,8 @@
 // I/O Pin Setup /////////////////////////////////////////////////////////////////////////
 // #define fridgePower 0 // Power On/Off the fridge
 #define DHTPIN 9
-#define pinTemperaturePeltier 3 // Read the values from the thermistor (Analog !)
-#define pinTemperatureOutside 4 // Read the values from the thermistor (Analog !)
+#define pinTemperaturePeltier 0 // Read the values from the thermistor (Analog !)
+#define pinTemperatureOutside 1 // Read the values from the thermistor (Analog !)
 #define pinFan 5 // Control the fan on that pin (0/1)
 #define pinPeltier 6 // Control the Peltier Module on that pin (PWM !)
 #define pinOnboardLED 13 // Onboard LED
@@ -36,16 +34,16 @@ unsigned long rolltime = millis() + TWOFACED;
 // Constants Setup ///////////////////////////////////////////////////////////////////////
 
 // Termistor Inside Fridge
-double coeffAinside = 1.12902*pow(10,-3);
-double coeffBinside = 2.3418*pow(10,-4);
-double coeffCinside = 8.7264*pow(10,-8);
+double coeffAinside = 1.12902 * pow(10, -3);
+double coeffBinside = 2.3418 * pow(10, -4);
+double coeffCinside = 8.7264 * pow(10, -8);
 double resistanceInside = 9910;
 double voltageInside = 1023;
 
 // Termistor Outside Fridge
-double coeffAoutside = 1.12902*pow(10,-3);
-double coeffBoutside = 2.3418*pow(10,-4);
-double coeffCoutside = 8.7264*pow(10,-8);
+double coeffAoutside = 1.12902 * pow(10, -3);
+double coeffBoutside = 2.3418 * pow(10, -4);
+double coeffCoutside = 8.7264 * pow(10, -8);
 double resistanceOutside = 9910;
 double voltageOutside = 1023;
 
@@ -61,30 +59,25 @@ double DHT_Humidity = 0; // Value of the Humidity (%) from the DHT-22
 double peltierTemperature = 0; // Value of the temperature (°C) from the thermistor on the Peltier Module
 double outsideTemperature = 0;
 double targetTemperature = 0;
+double Dewpoint = 0;
 boolean isDoorOpen = 0;
-
-
-char inputs [20];
-char oldInputs[20];
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 DHT dht(DHTPIN, DHTTYPE); // Init DHT Sensor
-
 
 void setup()
 {
   Serial.begin(9600); // Init Serial Monitor
 
   // Set the pinModes
-  pinMode(DHTPIN,INPUT); //  Mesure sur le module DHT
-  pinMode(pinTemperaturePeltier,INPUT); // Mesure à la thermistance
+  pinMode(DHTPIN, INPUT); //  Mesure sur le module DHT
+  pinMode(pinTemperaturePeltier, INPUT); // Mesure à la thermistance
   pinMode(pinOpenDetectorEmitter, OUTPUT); // Send signal for Door Detector
   pinMode(pinOpenDetectorReceiver, INPUT); // Receive signal from Emitter for Door Detector
   pinMode(pinOnboardLED, OUTPUT);
   pinMode(pinPeltier, OUTPUT);
   pinMode(pinFan, OUTPUT);
-
 
   dht.begin(); // Start DHT Sensor
 }
@@ -93,6 +86,7 @@ void loop()
 {
   readSerialData();
   readSensors(); // Read values from sensors
+  getAtmoDewpoint(DHT_Temperature, DHT_Humidity);
   delay(2000);
   sendSerialData();
 }
@@ -109,12 +103,13 @@ void readSensors()
   isDoorOpen = readOpenSensor(); // Check if Door is Open
   DHT_Temperature = readDHTTemperature(); // Read Temperature from DHT Module
   DHT_Humidity = readDHTHumidity(); // Read Humidity from DHT Module
+  Dewpoint = getAtmoDewpoint(DHT_Temperature, DHT_Humidity);
   // Every 2 seconds, read values from DHT Module (as values need to be read in a 2 sec interval)
   /*if((millis() - rolltime) >= 0) {
     DHT_Temperature = readDHTTemperature(); // Read Temperature from DHT Module
     DHT_Humidity = readDHTHumidity(); // Read Humidity from DHT Module
     rolltime += TWOFACED;
-  }*/
+    }*/
 }
 
 
@@ -122,10 +117,10 @@ void readSensors()
 // OK !
 double convertRawToCelsius (double tempRaw, double coeffA, double coeffB, double coeffC, double resistance, double voltage)
 {
-  long RTH=0;
-  RTH=(tempRaw*resistance)/(voltage-tempRaw);
-  double RSLT=0;
-  RSLT=(1/(coeffA+coeffB*log(RTH)+coeffC*(pow(log(RTH),3))))-273.15;
+  long RTH = 0;
+  RTH = (tempRaw * resistance) / (voltage - tempRaw);
+  double RSLT = 0;
+  RSLT = (1 / (coeffA + coeffB * log(RTH) + coeffC * (pow(log(RTH), 3)))) - 273.15;
   return RSLT;
 }
 
@@ -147,7 +142,7 @@ boolean readOpenSensor()
 
 // Send data to the serial monitor
 // OK !
-void sendSerialData(){
+void sendSerialData() {
   Serial.print(peltierTemperature);
   Serial.print(":"); // Separator
   Serial.print(outsideTemperature);
@@ -156,6 +151,8 @@ void sendSerialData(){
   Serial.print(":"); // Separator
   Serial.print(DHT_Humidity);
   Serial.print(":"); // Separator
+  Serial.print(Dewpoint);
+  Serial.print(":");
   Serial.print(isDoorOpen);
   Serial.println(); // New line = new measurements
 }
@@ -166,34 +163,37 @@ void sendSerialData(){
 void readSerialData()
 {
   // If new data available from the serial port
-  if(Serial.available()){
-        int ind=0;
-        char buff[6];
-        while(Serial.available()){
-            unsigned char c = Serial.read();
-            buff[ind] = c;
-            if(ind++ > 6) break;
-        }
-      String Data = buff; // We get the input from the Serial monitor as String first
-      float target = Data.toFloat(); // We convert it to float
-}
+  if (Serial.available()) {
+    int ind = 0;
+    char buff[6];
+    while (Serial.available()) {
+      unsigned char c = Serial.read();
+      buff[ind] = c;
+      if (ind++ > 6) break;
+    }
+    String Data = buff; // We get the input from the Serial monitor as String first
+    float target = Data.toFloat(); // We convert it to float
+  }
 }
 
-
-void setNewVariables()
-{
-  //target = target2;
-}
 
 
 
 // Command the parts of the Fridge
 void actionableIntelligence()
 {
-  
+
 }
 
 
+// Get Dewpoint
+// NOK
+double getAtmoDewpoint(double DHT_Temperature, double DHT_Humidity)
+{
+  double K = ((237.7 * DHT_Temperature) / (17.7 * DHT_Temperature) + log(DHT_Humidity));
+  double Tr = (237.7 * K) / (17.7 - K);
+  return Tr;
+}
 
 // Read Temperature from Termistor on Peltier Module
 // OK !
