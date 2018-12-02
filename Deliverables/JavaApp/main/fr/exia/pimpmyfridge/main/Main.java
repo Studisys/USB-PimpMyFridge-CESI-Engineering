@@ -1,6 +1,9 @@
 package fr.exia.pimpmyfridge.main;
 
+import org.jfree.ui.RefineryUtilities;
+
 import fr.exia.pimpmyfridge.model.Model;
+import fr.exia.pimpmyfridge.view.View;
 
 public class Main {
 
@@ -15,6 +18,11 @@ public class Main {
 		 
 		 // Create the model
 		 Model model = new Model();
+		 View chart = new View("Pimp My Fridge","Évolution des températures");
+	     chart.pack( );
+		 RefineryUtilities.centerFrameOnScreen( chart );
+		 chart.setVisible( true );
+		 
 		 
 		 // Create the view
 		 //View view = new View(model, model);
