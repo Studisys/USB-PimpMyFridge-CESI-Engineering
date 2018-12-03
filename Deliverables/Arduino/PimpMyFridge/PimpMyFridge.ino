@@ -48,6 +48,9 @@ double resistanceOutside = 9910;
 double voltageOutside = 1023;
 
 
+float target;
+
+String Data;
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -87,8 +90,11 @@ void loop()
   readSerialData();
   readSensors(); // Read values from sensors
   getAtmoDewpoint(DHT_Temperature, DHT_Humidity);
-  delay(2000);
+  delay(1000);
   sendSerialData();
+  Serial.print("String : ");
+  Serial.print(Data);
+  Serial.println();
 }
 
 
@@ -143,6 +149,7 @@ boolean readOpenSensor()
 // Send data to the serial monitor
 // OK !
 void sendSerialData() {
+  Serial.print("D:");
   Serial.print(peltierTemperature);
   Serial.print(":"); // Separator
   Serial.print(outsideTemperature);
@@ -151,9 +158,9 @@ void sendSerialData() {
   Serial.print(":"); // Separator
   Serial.print(DHT_Humidity);
   Serial.print(":"); // Separator
-  Serial.print(Dewpoint);
+  /*Serial.print(Dewpoint);
   Serial.print(":");
-  Serial.print(isDoorOpen);
+  Serial.print(isDoorOpen);*/
   Serial.println(); // New line = new measurements
 }
 
@@ -165,14 +172,14 @@ void readSerialData()
   // If new data available from the serial port
   if (Serial.available()) {
     int ind = 0;
-    char buff[6];
+    char buff[2];
     while (Serial.available()) {
       unsigned char c = Serial.read();
       buff[ind] = c;
-      if (ind++ > 6) break;
+      if (ind++ > 2) break;
     }
-    String Data = buff; // We get the input from the Serial monitor as String first
-    float target = Data.toFloat(); // We convert it to float
+    Data = buff; // We get the input from the Serial monitor as String first
+    target = Data.toFloat(); // We convert it to float
   }
 }
 
