@@ -104,12 +104,16 @@ public class View extends JFrame {
 		// Button Plus
 		buttonTargetPlus = new JButton("+");
 		buttonTargetPlus.setFont(new Font("Sans Serif", Font.BOLD, 30));
-		
+		/*buttonTargetPlus.setBorderPainted(false);
+		buttonTargetPlus.setFocusPainted(false);
+		buttonTargetPlus.setContentAreaFilled(false);*/
 		
 		// Button Minus
 		buttonTargetMinus = new JButton("-");
 		buttonTargetMinus.setFont(new Font("Sans Serif", Font.BOLD, 30));
-		
+		/*buttonTargetMinus.setBorderPainted(false);
+		buttonTargetMinus.setFocusPainted(false);
+		buttonTargetMinus.setContentAreaFilled(false);*/
 		
 		// Condensation Alert Text
 		alertCondensation = new JLabel("Risk of condensation");

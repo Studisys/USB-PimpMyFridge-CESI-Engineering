@@ -53,7 +53,7 @@ public class Controller implements IDataLinkListener, IActionListener {
 				String data = Float.toString(action.getTargetTemp());
 				ArduinoDataSource.writeData(data);
 				System.out.println("[ArduinoInput] Writing : " + data);
-				// AJOUTER ICI EVENEMENT ENVOI DATA ARDUINO
+
 			}
 		});
 		
@@ -71,7 +71,7 @@ public class Controller implements IDataLinkListener, IActionListener {
 				String data = Float.toString(action.getTargetTemp());
 				ArduinoDataSource.writeData(data);
 				System.out.println("[ArduinoInput] Writing : " + data);
-				// AJOUTER ICI EVENEMENT ENVOI DATA ARDUINO
+
 			}
 		});
 

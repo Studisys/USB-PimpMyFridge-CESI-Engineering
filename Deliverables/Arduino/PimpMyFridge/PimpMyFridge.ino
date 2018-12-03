@@ -92,9 +92,10 @@ void setup()
 
 void loop()
 {
+ 
   readSerialData();
   readSensors(); // Read values from sensors
-  getAtmoDewpoint(DHT_Temperature, DHT_Humidity);
+  getAtmoDewpoint();
   delay(1000);
   sendSerialData();
   actionableIntelligence();
@@ -115,9 +116,9 @@ void readSensors()
   peltierTemperature = readInsideTemperature(); // Read Temperature from Termistor on Peltier Module
   outsideTemperature = readOutsideTemperature(); // Read Temperature from Termistor outside Fridge
   isDoorOpen = readOpenSensor(); // Check if Door is Open
-  DHT_Temperature = readDHTTemperature(); // Read Temperature from DHT Module
+  DHT_Temperature = readDHTTemperature(); // Read Temperature from DHT Module;
   DHT_Humidity = readDHTHumidity(); // Read Humidity from DHT Module
-  Dewpoint = getAtmoDewpoint(DHT_Temperature, DHT_Humidity);
+  Dewpoint = getAtmoDewpoint();
   // Every 2 seconds, read values from DHT Module (as values need to be read in a 2 sec interval)
   /*if((millis() - rolltime) >= 0) {
     DHT_Temperature = readDHTTemperature(); // Read Temperature from DHT Module
@@ -165,9 +166,8 @@ void sendSerialData() {
   Serial.print(outsideTemperature);
   Serial.print(";"); // Separator
   Serial.print(DHT_Humidity);
-  /*Serial.print(Dewpoint);
-  Serial.print(":");
-  Serial.print(isDoorOpen);*/
+  /*Serial.print(";");
+  Serial.print(Dewpoint);*/
   Serial.println(); // New line = new measurements
 }
 
@@ -238,19 +238,18 @@ void actionableIntelligence()
 
 // Get Dewpoint
 // NOK
-double getAtmoDewpoint(double DHT_Temperature, double DHT_Humidity)
+double getAtmoDewpoint()
 {
-  double K = ((237.7 * DHT_Temperature) / (17.7 * DHT_Temperature) + log(DHT_Humidity));
-  double Tr = (237.7 * K) / (17.7 - K);
+  double Tr = ((237.7)*(((17.27*DHT_Temperature)/(237.7+DHT_Temperature))+log(DHT_Humidity*0.001)))/((17.27)*(((17.27*DHT_Temperature)/(17.27+DHT_Temperature))+log(DHT_Humidity*0.001)));
   return Tr;
 }
 
 // Read Temperature from Termistor on Peltier Module
 // OK !
-float readInsideTemperature()
+double readInsideTemperature()
 {
-  float insideTempRaw = analogRead(pinTemperaturePeltier);
-  float insideTempConverted = convertRawToCelsius(insideTempRaw, coeffAinside, coeffBinside, coeffCinside, resistanceInside, voltageInside);
+  double insideTempRaw = analogRead(pinTemperaturePeltier);
+  double insideTempConverted = convertRawToCelsius(insideTempRaw, coeffAinside, coeffBinside, coeffCinside, resistanceInside, voltageInside);
   return insideTempConverted;
 }
 

@@ -28,7 +28,6 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 		listeners = new ArrayList<IDataLinkListener>();
 	}
 	
-	
 	@Override
 	public void notifyListeners(Model data) {
 		
