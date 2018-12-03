@@ -206,15 +206,28 @@ void actionableIntelligence()
       //Temperature trop elevee
       //Refroidir
       digitalWrite(pinPeltier, HIGH);
-      Serial.println("[ArduinoOutput] Too hot. Starting cooling.");
-      //Serial.println("Trop chaud ! Refroidissement !");
+      Serial.print("[ArduinoOutput] Too hot. Starting cooling. ");
+      Serial.print("Current Internal Temperature (");
+      Serial.print(DHT_Temperature);
+      Serial.print(" C) is above the target temperature (");
+      Serial.print(targetTemperature);
+      Serial.println(" C).");
+      //Serial.println();
+      
+
         
           }
     else if(pourcentError>differenceOfTemperature){
     //Temperature trop basse
       //Couper alim
       digitalWrite(pinPeltier, LOW);
-      Serial.println("[ArduinoOutput] Too cold. Stopping cooling.");
+      Serial.print("[ArduinoOutput] Too cold. Stopping cooling. ");
+      Serial.print("Current Internal Temperature (");
+      Serial.print(DHT_Temperature);
+      Serial.print(" C) is below the target temperature (");
+      Serial.print(targetTemperature);
+      Serial.println(" C).");
+      //Serial.println();
     }
   }
   else if (abs(pourcentError)>abs(differenceOfTemperature)){

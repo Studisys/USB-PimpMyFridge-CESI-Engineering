@@ -33,6 +33,8 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 	// Identifier in our incoming frame
 	private static final String DataID = "D:";
 	
+	private static final String OutputID = "[ArduinoOutput]";
+	
 	// Number of fields in the frame
 	private static final int FIELD_NUMBER = 4;
 	
@@ -156,7 +158,7 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 				notifyListeners(new Model(values[0], values[1], values[2], values[3]));
 			}
 			
-			else if (inputLine.startsWith("[ArduinoOutput]")) {
+			else if (inputLine.startsWith(OutputID)) {
 				
 					
 					// Display the received frame in console
@@ -192,6 +194,9 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 		return r;
 	}
 
+	
+	
+	// Method to send data over the serial port
 	public static void writeData(String data) {
 		try {
 			output.write(data.getBytes());

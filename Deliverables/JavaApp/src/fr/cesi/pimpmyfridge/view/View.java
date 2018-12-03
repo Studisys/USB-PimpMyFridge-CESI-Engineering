@@ -19,7 +19,7 @@ public class View extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
-
+	// Labels 
 	public JLabel labelTargetTemp;
 	public JLabel labelTempDHT;
 	public JLabel labelTempOutside;
@@ -28,9 +28,11 @@ public class View extends JFrame {
 	public JLabel alertCondensation;
 	public JLabel alertTempAnomaly;
 
-	public JButton buttonTargetPlus;
-	public JButton buttonTargetMinus;
+	public JButton buttonTargetPlus; // Target Temperature Button + (Plus)
+	public JButton buttonTargetMinus; // Target Temperature Button - (Minus)
 	
+	
+	// The chart
 	public LineChart chart;
 	
 	public View() {

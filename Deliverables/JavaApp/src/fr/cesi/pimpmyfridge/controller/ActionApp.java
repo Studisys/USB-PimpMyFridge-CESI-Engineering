@@ -16,7 +16,7 @@ import fr.cesi.pimpmyfridge.model.Model;
 // 
 public class ActionApp implements IAction {
 	
-	protected float targetTemp = 15.0f; 	// Default Target Temperature
+	protected float targetTemp = 18.0f; 	// Default Target Temperature
 	
 	protected double histoIn;
 	protected Date histoDate;
