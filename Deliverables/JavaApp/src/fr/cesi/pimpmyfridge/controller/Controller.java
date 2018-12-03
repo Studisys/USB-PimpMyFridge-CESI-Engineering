@@ -110,7 +110,7 @@ public class Controller implements IDataLinkListener, IActionListener {
 				view.labelHumidity.setText(String.format("%.1f", data.getHumidityPercent()) + "%");
 				
 				// Add new data to the chart
-				view.chart.addData((float)data.getPeltierTemp(), (float)data.getDHTTemp(), (float)data.getOutsideTemp());
+				view.chart.addData((float)data.getDHTTemp(), (float)data.getOutsideTemp(), (float)data.getPeltierTemp());
 			}
 		});
 	}
