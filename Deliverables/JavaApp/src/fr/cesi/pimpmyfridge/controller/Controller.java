@@ -38,7 +38,7 @@ public class Controller implements IDataLinkListener, IActionListener {
 		this.view.alertTempAnomaly.setVisible(false);
 		this.view.chart.mark.setValue(action.getTargetTemp());
 
-		
+		// Set the button + behaviour when clicked
 		view.buttonTargetPlus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				Controller.this.action.setTempConsigne(action.getTargetTemp() + 0.5f);
@@ -50,12 +50,14 @@ public class Controller implements IDataLinkListener, IActionListener {
 					System.out.println("IOException");
 					e.printStackTrace();
 				}
-				//String data = Float.toString(action.getTargetTemp());
-				// ArduinoDataSource.writeData(data);
-				// System.out.println("Writing : " + data);
+				String data = Float.toString(action.getTargetTemp());
+				ArduinoDataSource.writeData(data);
+				System.out.println("[ArduinoInput] Writing : " + data);
 				// AJOUTER ICI EVENEMENT ENVOI DATA ARDUINO
 			}
 		});
+		
+		// Set the button - behaviour when clicked
 		view.buttonTargetMinus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionListener) {
 				Controller.this.action.setTempConsigne(action.getTargetTemp() - 0.5f);
@@ -66,9 +68,9 @@ public class Controller implements IDataLinkListener, IActionListener {
 					System.err.println("IOException");
 					e.printStackTrace();
 				}
-				//String data = Float.toString(action.getTargetTemp());
-				//ArduinoDataSource.writeData(data);
-				//System.out.println("Writing : " + data);
+				String data = Float.toString(action.getTargetTemp());
+				ArduinoDataSource.writeData(data);
+				System.out.println("[ArduinoInput] Writing : " + data);
 				// AJOUTER ICI EVENEMENT ENVOI DATA ARDUINO
 			}
 		});

@@ -13,8 +13,10 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 	
 	private IDataLink source;
 	
+	@SuppressWarnings("unused")
 	private List<Double> values;
 
+	@SuppressWarnings("unused")
 	private int length;
 	
 	private ArrayList<IDataLinkListener> listeners;

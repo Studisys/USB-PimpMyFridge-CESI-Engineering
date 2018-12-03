@@ -49,7 +49,7 @@ double resistanceOutside = 9910;
 double voltageOutside = 1023;
 
 
-float targetTemperature;
+float targetTemperature = 18;
 
 String Data;
 
@@ -186,11 +186,9 @@ void readSerialData()
       if (ind++ > 3) break;
     }
     Data = buff; // We get the input from the Serial monitor as String first
-    if (Data.length() != 0)
-    {
-      Target = Data;
-    }
-   targetTemperature = Data.toFloat(); // We convert it to float
+    targetTemperature = Data.toFloat();
+    Serial.print("[ArduinoOutput] Confirmation of new target temperature : ");
+    Serial.println(targetTemperature); // We convert it to float
   }
 }
 
@@ -208,13 +206,15 @@ void actionableIntelligence()
       //Temperature trop elevee
       //Refroidir
       digitalWrite(pinPeltier, HIGH);
-      Serial.println("Trop chaud ! Refroidissement !");
-    }
+      Serial.println("[ArduinoOutput] Too hot. Starting cooling.");
+      //Serial.println("Trop chaud ! Refroidissement !");
+        
+          }
     else if(pourcentError>differenceOfTemperature){
-      //Temperature trop basse
+    //Temperature trop basse
       //Couper alim
       digitalWrite(pinPeltier, LOW);
-      Serial.println("Trop froid ! Arrêt du refroidissement !");
+      Serial.println("[ArduinoOutput] Too cold. Stopping cooling.");
     }
   }
   else if (abs(pourcentError)>abs(differenceOfTemperature)){

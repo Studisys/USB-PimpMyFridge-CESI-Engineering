@@ -103,7 +103,7 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 	// Method to start the data link
 	public void start() {
 		try {
-			System.out.println("[ArduinoInput] Link Start !");
+			System.out.println("[ArduinoOutput] Link Start !");
 			serialPort.addEventListener(this); // We listen on it
 			serialPort.notifyOnDataAvailable(true); // Notify if there's data available on the serial link
 		}
@@ -117,7 +117,7 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 	// Method to properly close the Serial link on program close
 	public synchronized void stop() {
 		if (serialPort != null) {
-			System.out.println("[ArduinoInput] Link Stopped !");
+			System.out.println("[ArduinoOutput] Link Stopped !");
 			serialPort.removeEventListener(); // We don't listen anymore
 			serialPort.close(); // We close the data link
 		}
@@ -128,7 +128,7 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 		
 		
 		if (event0.getEventType() != SerialPortEvent.DATA_AVAILABLE) {
-			System.out.println("[ArduinoInput] Event : " + event0.getEventType());
+			System.out.println("[ArduinoOutput] Event : " + event0.getEventType());
 			return;
 		}
 		
@@ -143,23 +143,29 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 				
 				// If there's not 4 fields, then the message is probably garbage
 				if (tokens.length != FIELD_NUMBER) {
-					System.err.println("[ArduinoInput] Invalid data message (message does not have " + "4 " + "fields. Received message is : " + inputLine + ")");
+					System.err.println("[ArduinoOutput] Invalid data message (message does not have " + "4 " + "fields. Received message is : " + inputLine + ")");
 					return;
 				}
 				// We convert all the values into Float values and put them in an array of Float
 				float[] values = parseFloatArray(tokens);
 				
 				// Display the received frame in console
-				System.out.println("Received the following frame : " + inputLine);
+				System.out.println("[ArduinoOutput] Received the following frame : " + inputLine);
 				
 				// We notify for 4 new values : Peltier, DHT Temp, Outside Temp and DHT Humidity
 				notifyListeners(new Model(values[0], values[1], values[2], values[3]));
 			}
 			
-			
-			else {
+			else if (inputLine.startsWith("[ArduinoOutput]")) {
+				
+					
+					// Display the received frame in console
+					System.out.println(inputLine);
+
+								
+			} else {
 				// If the frame is not valid
-				System.err.println("[ArduinoInput] Message received is unknown (Invalid)");
+				System.err.println("[ArduinoOutput] Message received is unknown (Invalid). Received frame : " + inputLine);
 			}
 		}
 		catch (IOException e) {
@@ -172,7 +178,7 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 			}
 		}
 		catch (Throwable e) {
-			System.err.println(String.format("[ArduinoInput] Error %s", e.toString())); // Show the error
+			System.err.println(String.format("[ArduinoOutput] Error %s", e.toString())); // Show the error
 		}
 		
 
