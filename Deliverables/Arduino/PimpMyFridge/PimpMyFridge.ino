@@ -6,7 +6,7 @@
 
 
 // Libraries Includes ////////////////////////////////////////////////////////////////////
-// #include "Libraries/PimpMyFridge/PimpMyFridge.h" // Best library in that project, ha ! Includes everything needed
+// #include "Libraries/PiwmpMyFridge/PimpMyFridge.h" // Best library in that project, ha ! Includes everything needed
 
 #include <DHT.h>
 #include <DHT_U.h>
@@ -15,7 +15,8 @@
 
 // I/O Pin Setup /////////////////////////////////////////////////////////////////////////
 // #define fridgePower 0 // Power On/Off the fridge
-#define DHTPIN 9
+#define DHTPININ 9
+#define DHTPINOUT 10
 #define pinTemperaturePeltier 0 // Read the values from the thermistor (Analog !)
 #define pinTemperatureOutside 1 // Read the values from the thermistor (Analog !)
 #define pinFan 5 // Control the fan on that pin (0/1)
@@ -48,9 +49,11 @@ double resistanceOutside = 9910;
 double voltageOutside = 1023;
 
 
-float target;
+float targetTemperature;
 
 String Data;
+
+String Target;
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -61,20 +64,21 @@ double DHT_Temperature = 0; // Value of the Temperature (°C) from the DHT-22
 double DHT_Humidity = 0; // Value of the Humidity (%) from the DHT-22
 double peltierTemperature = 0; // Value of the temperature (°C) from the thermistor on the Peltier Module
 double outsideTemperature = 0;
-double targetTemperature = 0;
+//double targetTemperature = 0;
 double Dewpoint = 0;
 boolean isDoorOpen = 0;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-DHT dht(DHTPIN, DHTTYPE); // Init DHT Sensor
-
+DHT dhtIn(DHTPININ, DHTTYPE); // Init DHT Sensor
+DHT dhtOut(DHTPINOUT, DHTTYPE); // Init DHT Sensor
 void setup()
 {
   Serial.begin(9600); // Init Serial Monitor
 
   // Set the pinModes
-  pinMode(DHTPIN, INPUT); //  Mesure sur le module DHT
+  pinMode(DHTPININ, INPUT); //  Mesure sur le module DHT Intérieur
+  pinMode(DHTPINOUT, INPUT); //  Mesure sur le module DHT Extérieur
   pinMode(pinTemperaturePeltier, INPUT); // Mesure à la thermistance
   pinMode(pinOpenDetectorEmitter, OUTPUT); // Send signal for Door Detector
   pinMode(pinOpenDetectorReceiver, INPUT); // Receive signal from Emitter for Door Detector
@@ -82,7 +86,8 @@ void setup()
   pinMode(pinPeltier, OUTPUT);
   pinMode(pinFan, OUTPUT);
 
-  dht.begin(); // Start DHT Sensor
+  dhtIn.begin(); // Start DHT Sensor
+  dhtOut.begin(); // Start DHT Sensor
 }
 
 void loop()
@@ -92,9 +97,12 @@ void loop()
   getAtmoDewpoint(DHT_Temperature, DHT_Humidity);
   delay(1000);
   sendSerialData();
-  Serial.print("String : ");
-  Serial.print(Data);
-  Serial.println();
+  actionableIntelligence();
+  //Serial.print("String : ");
+  //Serial.println(Target);
+
+  //Serial.println(Data.length());
+  //Serial.println();
 }
 
 
@@ -151,13 +159,12 @@ boolean readOpenSensor()
 void sendSerialData() {
   Serial.print("D:");
   Serial.print(peltierTemperature);
-  Serial.print(":"); // Separator
-  Serial.print(outsideTemperature);
-  Serial.print(":"); // Separator
+  Serial.print(";"); // Separator
   Serial.print(DHT_Temperature);
-  Serial.print(":"); // Separator
+  Serial.print(";");
+  Serial.print(outsideTemperature);
+  Serial.print(";"); // Separator
   Serial.print(DHT_Humidity);
-  Serial.print(":"); // Separator
   /*Serial.print(Dewpoint);
   Serial.print(":");
   Serial.print(isDoorOpen);*/
@@ -172,14 +179,18 @@ void readSerialData()
   // If new data available from the serial port
   if (Serial.available()) {
     int ind = 0;
-    char buff[2];
+    char buff[3];
     while (Serial.available()) {
       unsigned char c = Serial.read();
       buff[ind] = c;
-      if (ind++ > 2) break;
+      if (ind++ > 3) break;
     }
     Data = buff; // We get the input from the Serial monitor as String first
-    target = Data.toFloat(); // We convert it to float
+    if (Data.length() != 0)
+    {
+      Target = Data;
+    }
+   targetTemperature = Data.toFloat(); // We convert it to float
   }
 }
 
@@ -189,7 +200,26 @@ void readSerialData()
 // Command the parts of the Fridge
 void actionableIntelligence()
 {
-
+  float differenceOfTemperature = DHT_Temperature - targetTemperature;
+  float pourcentError = (5/100)*targetTemperature;
+  
+  if (abs(pourcentError)<abs(differenceOfTemperature)){
+    if(pourcentError<differenceOfTemperature){
+      //Temperature trop elevee
+      //Refroidir
+      digitalWrite(pinPeltier, HIGH);
+      Serial.println("Trop chaud ! Refroidissement !");
+    }
+    else if(pourcentError>differenceOfTemperature){
+      //Temperature trop basse
+      //Couper alim
+      digitalWrite(pinPeltier, LOW);
+      Serial.println("Trop froid ! Arrêt du refroidissement !");
+    }
+  }
+  else if (abs(pourcentError)>abs(differenceOfTemperature)){
+    //Don't touch it bro all is right
+  }
 }
 
 
@@ -204,10 +234,10 @@ double getAtmoDewpoint(double DHT_Temperature, double DHT_Humidity)
 
 // Read Temperature from Termistor on Peltier Module
 // OK !
-double readInsideTemperature()
+float readInsideTemperature()
 {
-  double insideTempRaw = analogRead(pinTemperaturePeltier);
-  double insideTempConverted = convertRawToCelsius(insideTempRaw, coeffAinside, coeffBinside, coeffCinside, resistanceInside, voltageInside);
+  float insideTempRaw = analogRead(pinTemperaturePeltier);
+  float insideTempConverted = convertRawToCelsius(insideTempRaw, coeffAinside, coeffBinside, coeffCinside, resistanceInside, voltageInside);
   return insideTempConverted;
 }
 
@@ -216,26 +246,25 @@ double readInsideTemperature()
 
 // Read Temperature from Outside Termistor
 // OK !
-double readOutsideTemperature()
+float readOutsideTemperature()
 {
-  double outsideTempRaw = analogRead(pinTemperatureOutside);
-  double outsideTempConverted = convertRawToCelsius(outsideTempRaw, coeffAoutside, coeffBoutside, coeffCoutside, resistanceOutside, voltageOutside);
-  return outsideTempConverted;
+  float t = dhtOut.readTemperature();
+  return t;
 }
 
 // Read Temperature from DHT Module
 // OK !
-double readDHTTemperature()
+float readDHTTemperature()
 {
-  float t = dht.readTemperature();
+  float t = dhtIn.readTemperature();
   return t;
 }
 
 
 // Read Humidity from DHT Module
 // OK !
-double readDHTHumidity()
+float readDHTHumidity()
 {
-  float h = dht.readHumidity();
+  float h = dhtIn.readHumidity();
   return h;
 }
