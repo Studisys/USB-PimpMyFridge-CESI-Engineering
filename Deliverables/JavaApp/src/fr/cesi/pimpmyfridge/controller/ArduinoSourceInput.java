@@ -26,13 +26,6 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 		listeners = new ArrayList<IDataLinkListener>();
 	}
 	
-	protected double add(double value) {
-		values.add(value);
-		while (values.size() > length) values.remove(0);
-		float sum = 0;
-		for (double val : values) sum += val;
-		return sum / (double)values.size();
-	}
 	
 	@Override
 	public void notifyListeners(Model data) {
@@ -50,11 +43,13 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 		});
 	}
 
+	// Init Data Source
 	@Override
 	public void init() throws Throwable {
 		this.source.init();
 	}
 
+	// Start listening for changes 
 	@Override
 	public void start() {
 		
@@ -63,6 +58,7 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 		this.source.start();
 	}
 
+	// Stop listening for changes
 	@Override
 	public void stop() {
 		
@@ -71,16 +67,19 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 		this.source.stop();
 	}
 
+	// Add Listener
 	@Override
 	public void addListener(IDataLinkListener observer) {
 		this.listeners.add(observer);
 	}
 
+	// Remove Listener
 	@Override
 	public void removeListener(IDataLinkListener observer) {
 		this.listeners.remove(observer);
 	}
 
+	// Notify the listeners when there's a change
 	@Override
 	public void notifyListeners(final boolean powerOn) {
 		listeners.forEach(new Consumer<IDataLinkListener>() {
@@ -88,17 +87,6 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 				//observer.onPowerStatusChanged(powerOn);
 			}
 		});
-	}
-
-
-	@Override
-	public boolean isPowerEnabled() {
-		return this.source.isPowerEnabled();
-	}
-
-	@Override
-	public long getPowerUptime() {
-		return this.source.getPowerUptime();
 	}
 
 	@Override

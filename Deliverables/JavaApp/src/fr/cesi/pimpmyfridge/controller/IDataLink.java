@@ -25,10 +25,4 @@ public interface IDataLink {
 	
 	public void notifyListeners(boolean powerOn);
 	
-	
-	public boolean isPowerEnabled();
-
-	
-	public long getPowerUptime();
-	
 }

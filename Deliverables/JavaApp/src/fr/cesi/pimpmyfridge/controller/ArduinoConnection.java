@@ -65,11 +65,6 @@ public abstract class ArduinoConnection implements IDataLink {
 		}
 	}
 	
-	@Override
-	public boolean isPowerEnabled() {
-		return this.powerEnabled;
-	}
-	
 	
 	public long getPowerUptime() {
 		long time = tempsAllumage;

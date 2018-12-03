@@ -64,6 +64,7 @@ public class Main {
 	// If no Arduino Detected (no COM port)
 		if (implementation == null) {
 			System.err.println("[Implementation] Can't get data from Source.");
+			JOptionPane.showMessageDialog(null, "Can't get data from Source.", "Error.", JOptionPane.ERROR_MESSAGE);
 			// Exit
 			System.exit(-1);
 		}

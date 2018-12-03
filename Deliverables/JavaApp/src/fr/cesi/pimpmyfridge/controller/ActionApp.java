@@ -25,9 +25,10 @@ public class ActionApp implements IAction {
 	protected boolean alertTempAnomaly = false;
 
 	protected List<IActionListener> listeners;
-	protected Date lastPeltierOn = null;
-	
 
+	
+	
+	// Create an array of listeners
 	public ActionApp() {
 		this.listeners = new ArrayList<IActionListener>();
 	}
@@ -37,6 +38,7 @@ public class ActionApp implements IAction {
 	public void onNewDataRead(Model data) {
 		detectCondensation(data);
 		detectTempAnomaly(data);
+		//detectDoorStatus(data);
 	}
 
 	
@@ -78,7 +80,15 @@ public class ActionApp implements IAction {
 			notifyAlertCondensation(isCondensation);
 		}
 	}
+	
+	
+	// Detect Door Status
+	protected void detectDoorStatus (Model data) {
+		
+	}
 
+	
+	// Set the Target Temperature
 	@Override
 	public void setTempConsigne(float targetTemp) {
 		
@@ -96,11 +106,15 @@ public class ActionApp implements IAction {
 		this.listeners.add(observer);
 	}
 
+	
 	@Override
+	// Remove listener
 	public void removeListener(IActionListener observer) {
 		this.listeners.remove(observer);
 	}
 
+	
+	// Notifier for Target Temperature changes
 	@Override
 	public void notifyTargetTempChanged(final double targetTemp) {
 		System.out.println("[NewAppEvent] New Target Temperature : " + targetTemp);
@@ -111,7 +125,8 @@ public class ActionApp implements IAction {
 		});
 	}
 
-	
+
+	// Notifier for Condensation Alert changes
 	@Override
 	public void notifyAlertCondensation(final boolean state) {
 		System.out.println("[AIAlert] Condensation Risk!");
@@ -122,6 +137,7 @@ public class ActionApp implements IAction {
 		});
 	}
 
+	// Notifier for Temperature Anomaly Alert changes
 	@Override
 	public void notifyAlertTempAnomaly(final boolean state) {
 		System.out.println("[AIAlert] Abnormal Temperature!");

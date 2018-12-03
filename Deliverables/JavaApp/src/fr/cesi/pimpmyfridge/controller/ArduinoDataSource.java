@@ -143,7 +143,7 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 				
 				// If there's not 4 fields, then the message is probably garbage
 				if (tokens.length != FIELD_NUMBER) {
-					System.err.println("[Arduino] Invalid data message (message does not have " + "4 " + "fields. Received message is : " + inputLine + ")");
+					System.err.println("[ArduinoInput] Invalid data message (message does not have " + "4 " + "fields. Received message is : " + inputLine + ")");
 					return;
 				}
 				// We convert all the values into Float values and put them in an array of Float
