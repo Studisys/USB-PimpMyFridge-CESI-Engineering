@@ -38,10 +38,10 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 	public void notifyListeners(Model data) {
 		
 		final Model newData = new Model(
-				data.getHumidityPercent(),
-				data.getDHTTemp(),
 				data.getPeltierTemp(),
-				data.getOutsideTemp()
+				data.getDHTTemp(),
+				data.getOutsideTemp(),
+				data.getHumidityPercent()
 		);
 		listeners.forEach(new Consumer<IDataLinkListener>() {
 			public void accept(IDataLinkListener observer) {
@@ -72,20 +72,20 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 	}
 
 	@Override
-	public void addListener(IDataLinkListener obs) {
-		this.listeners.add(obs);
+	public void addListener(IDataLinkListener observer) {
+		this.listeners.add(observer);
 	}
 
 	@Override
-	public void removeListener(IDataLinkListener obs) {
-		this.listeners.remove(obs);
+	public void removeListener(IDataLinkListener observer) {
+		this.listeners.remove(observer);
 	}
 
 	@Override
 	public void notifyListeners(final boolean powerOn) {
 		listeners.forEach(new Consumer<IDataLinkListener>() {
 			public void accept(IDataLinkListener observer) {
-				observer.onPowerStatusChanged(powerOn);
+				//observer.onPowerStatusChanged(powerOn);
 			}
 		});
 	}
@@ -105,11 +105,6 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 	public void onNewDataRead(Model data) {
 		
 		notifyListeners(data);
-	}
-
-	@Override
-	public void onPowerStatusChanged(boolean powerOn) {
-		notifyListeners(powerOn);
 	}
 
 }

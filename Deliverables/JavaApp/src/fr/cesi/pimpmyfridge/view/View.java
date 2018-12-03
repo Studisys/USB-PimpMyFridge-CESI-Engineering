@@ -6,15 +6,12 @@ import java.awt.Font;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.border.TitledBorder;
 
 import org.jfree.chart.ChartPanel;
 
@@ -44,56 +41,86 @@ public class View extends JFrame {
 		setTitle("PimpMyFridge - CommandCenter");
 		
 		JLabel labelPeltierTemperature = new JLabel("°C Peltier (Internal)");
-	
-		labelTempPeltier = new JLabel("0 \u00B0C");
+		labelPeltierTemperature.setForeground(Color.WHITE); // Set White Color
+		labelPeltierTemperature.setHorizontalAlignment(SwingConstants.CENTER); // Aligned to center
+		labelPeltierTemperature.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+		
+		
+		labelTempPeltier = new JLabel("0 \u00B0C"); // °C
 		labelTempPeltier.setFont(new Font("Sans Serif", Font.PLAIN, 22));
-		labelTempPeltier.setForeground(new Color(0, 174, 189));
+		labelTempPeltier.setForeground(new Color(241, 61, 7));
 		labelTempPeltier.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JLabel labelInternalTemperature = new JLabel("°C Internal (DHT)");
+		labelInternalTemperature.setForeground(Color.WHITE); // Set White Color
+		labelInternalTemperature.setHorizontalAlignment(SwingConstants.CENTER); // Aligned to center
+		labelInternalTemperature.setFont(new Font("Sans Serif", Font.PLAIN, 16));
 		
-		labelTempDHT = new JLabel("0 \u00B0C");
+		
+		labelTempDHT = new JLabel("0 \u00B0C"); // °C
 		labelTempDHT.setFont(new Font("Sans Serif", Font.PLAIN, 22));
 		labelTempDHT.setForeground(new Color(0, 174, 189));
 		labelTempDHT.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
 		JLabel labelExternalTemperature = new JLabel("°C Externe");
+		labelExternalTemperature.setForeground(Color.WHITE); // Set White Color
+		labelExternalTemperature.setHorizontalAlignment(SwingConstants.CENTER); // Aligned to center
+		labelExternalTemperature.setFont(new Font("Sans Serif", Font.PLAIN, 16));
 		
-		labelTempOutside = new JLabel("0\u00B0 C");
-		labelTempOutside.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		labelTempOutside.setForeground(new Color(241, 61, 7));
+		labelTempOutside = new JLabel("0\u00B0 C"); // °C
+		labelTempOutside.setFont(new Font("Sans Serif", Font.PLAIN, 22));
+		labelTempOutside.setForeground(new Color(34,139,34));
 		labelTempOutside.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel labelHumidityPercent = new JLabel("% humidit\u00E9");
+		
+		/* Text for the Humidity Section */
+		JLabel labelHumidityPercent = new JLabel("% Humidity"); // Create JLabel
+		labelHumidityPercent.setForeground(Color.WHITE); // Set White Color
+		labelHumidityPercent.setHorizontalAlignment(SwingConstants.CENTER); // Aligned to center
+		labelHumidityPercent.setFont(new Font("Sans Serif", Font.PLAIN, 16));
 		
 		labelHumidity = new JLabel("0 %");
-		labelHumidity.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		labelHumidity.setFont(new Font("Sans Serif", Font.PLAIN, 22));
 		labelHumidity.setBackground(new Color(66, 255, 66));
+		labelHumidity.setForeground(Color.ORANGE);
 		labelHumidity.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
 		JLabel labelTarget = new JLabel("Target");
-		labelTarget.setHorizontalAlignment(SwingConstants.CENTER);
+		labelTarget.setForeground(Color.WHITE); // Set White Color
+		labelTarget.setHorizontalAlignment(SwingConstants.CENTER); // Aligned to center
+		labelTarget.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+		
 		
 		labelTargetTemp = new JLabel("0 \u00B0C");
 		labelTargetTemp.setForeground(Color.ORANGE);
-		labelTargetTemp.setFont(new Font("Tahoma", Font.PLAIN, 28));
+		labelTargetTemp.setFont(new Font("Sans Serif", Font.PLAIN, 28));
 		labelTargetTemp.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		buttonTargetPlus = new JButton("+");
-		buttonTargetPlus.setFont(new Font("Tahoma", Font.BOLD, 30));
-		buttonTargetMinus = new JButton("-");
-		buttonTargetMinus.setFont(new Font("Tahoma", Font.BOLD, 30));
 		
+		// Button Plus
+		buttonTargetPlus = new JButton("+");
+		buttonTargetPlus.setFont(new Font("Sans Serif", Font.BOLD, 30));
+		
+		
+		// Button Minus
+		buttonTargetMinus = new JButton("-");
+		buttonTargetMinus.setFont(new Font("Sans Serif", Font.BOLD, 30));
+		
+		
+		// Condensation Alert Text
 		alertCondensation = new JLabel("Risk of condensation");
-		alertCondensation.setFont(new Font("Tahoma", Font.BOLD, 11));
+		alertCondensation.setFont(new Font("Sans Serif", Font.BOLD, 11));
 		alertCondensation.setForeground(new Color(241, 61, 7));
 		
 		
+		// Temperature Anomaly Alert Text
 		alertTempAnomaly = new JLabel("Temperature Anomaly");
-		alertTempAnomaly.setFont(new Font("Tahoma", Font.BOLD, 11));
+		alertTempAnomaly.setFont(new Font("Sans Serif", Font.BOLD, 11));
 		alertTempAnomaly.setForeground(new Color(241, 61, 7));
+		
+		
 		
 		JPanel panelCenter = new JPanel();
 		chart = new LineChart("Temperature Chart", "Internal and External Temperatures");
@@ -101,13 +128,20 @@ public class View extends JFrame {
 		
 		panelCenter.add(component, "chart");
 		
-		
+		// Instantiate Left Panel
 		JPanel panelLeft = new JPanel();
 		
-		panelLeft.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), null, TitledBorder.LEADING, TitledBorder.TOP));
+		// Set Background for Left Panel
+		panelLeft.setBackground(new Color(107, 106, 104));
+		
+		// We don't want borders. If borders are required, uncomment the following line :
+		//panelLeft.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), null, TitledBorder.LEADING, TitledBorder.TOP));
 		
 		JPanel panelRight = new JPanel();
-		panelRight.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), null, TitledBorder.LEADING, TitledBorder.TOP));
+		panelRight.setBackground(new Color(107, 106, 104));
+		
+		// We don't want borders. If borders are required, uncomment the following line :
+		//panelRight.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), null, TitledBorder.LEADING, TitledBorder.TOP));
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -115,11 +149,11 @@ public class View extends JFrame {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(panelCenter, GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE)
+						.addComponent(panelCenter, GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panelLeft, GroupLayout.PREFERRED_SIZE, 378, GroupLayout.PREFERRED_SIZE)
+							.addComponent(panelLeft, GroupLayout.PREFERRED_SIZE, 512, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panelRight, GroupLayout.PREFERRED_SIZE, 423, Short.MAX_VALUE)))
+							.addComponent(panelRight, GroupLayout.PREFERRED_SIZE, 100, Short.MAX_VALUE)))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -140,8 +174,8 @@ public class View extends JFrame {
 				.addGroup(gl_panelRight.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panelRight.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(labelTargetTemp, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelTarget, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
+						.addComponent(labelTargetTemp, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelTarget, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panelRight.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panelRight.createSequentialGroup()
@@ -182,13 +216,13 @@ public class View extends JFrame {
 			gl_panelLeft.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelLeft.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panelLeft.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(labelTempDHT, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(labelInternalTemperature, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panelLeft.createParallelGroup(Alignment.LEADING, false)
 							.addComponent(labelTempPeltier, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(labelPeltierTemperature, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panelLeft.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(labelTempDHT, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(labelInternalTemperature, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 						.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panelLeft.createParallelGroup(Alignment.LEADING, false)
 						.addComponent(labelTempOutside, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -201,27 +235,29 @@ public class View extends JFrame {
 		);
 		
 		
-		
 		gl_panelLeft.setVerticalGroup(
 			gl_panelLeft.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelLeft.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panelLeft.createParallelGroup(Alignment.BASELINE)
 						.addComponent(labelPeltierTemperature)
-						.addComponent(labelExternalTemperature)
 						.addComponent(labelInternalTemperature)
+						.addComponent(labelExternalTemperature)
 						.addComponent(labelHumidityPercent))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panelLeft.createParallelGroup(Alignment.LEADING)
-						.addComponent(labelHumidity, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
-						.addComponent(labelTempOutside, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+						.addComponent(labelTempPeltier, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
 						.addComponent(labelTempDHT, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
-						.addComponent(labelTempPeltier, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE))
+						.addComponent(labelTempOutside, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+						.addComponent(labelHumidity, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+)
 					.addContainerGap())
 		);
 		panelLeft.setLayout(gl_panelLeft);
 		getContentPane().setLayout(groupLayout);
 		
+		
+		// Gray color on the main Frame Background of the Window
 		getContentPane().setBackground(new Color(107, 106, 104));
 		
 	}

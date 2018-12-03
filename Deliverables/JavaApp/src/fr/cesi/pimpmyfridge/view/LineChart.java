@@ -11,7 +11,6 @@ import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.Range;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
@@ -20,12 +19,14 @@ import org.jfree.ui.RectangleEdge;
 
 @SuppressWarnings("serial")
 public class LineChart extends ApplicationFrame{
-	private JFreeChart lineChart;
-	@SuppressWarnings("unused")
-	private DefaultCategoryDataset dataset;
-	private XYSeries tempOutside;
-	private XYSeries tempDHT;
-	private XYSeries tempPeltier;
+	
+	// Objects for chart
+	private JFreeChart lineChart; 	// Chart
+	private XYSeries tempPeltier; // Peltier Temp
+	private XYSeries tempDHT; // DHT Temp Inside
+	private XYSeries tempOutside; // DHT Temp Outside
+
+
 	
 	private long counter;
 	public ValueMarker mark;
@@ -59,8 +60,8 @@ public class LineChart extends ApplicationFrame{
 		  plot.setRangeGridlinePaint(new Color(10,10,10));
 		  plot.setDomainGridlinePaint(new Color(10,10,10));
 		  
-		  plot.getDomainAxis().setLabelPaint(new Color(200,200,200));
-		  plot.getRangeAxis().setLabelPaint(new Color(200,200,200));
+		  plot.getDomainAxis().setLabelPaint(Color.WHITE);
+		  plot.getDomainAxis().setTickLabelPaint(Color.WHITE);
 		  
 		  XYItemRenderer renderer = plot.getRenderer();
 		  
@@ -74,13 +75,19 @@ public class LineChart extends ApplicationFrame{
 		  renderer.setSeriesPaint(1, new Color(0, 174, 189));
 		  renderer.setSeriesStroke(1,  new BasicStroke(2));
 		  
+		  renderer.setSeriesItemLabelPaint(2, new Color(34,139,34));
+		  renderer.setSeriesPaint(2, new Color(34,139,34));
+		  renderer.setSeriesStroke(2,  new BasicStroke(2));
+		  
+		  
 		  plot.getRangeAxis().setRange(new Range(10, 35)); 
-		  plot.getRangeAxis().setTickLabelPaint(new Color(200,200,200));
+		  plot.getRangeAxis().setTickLabelPaint(Color.WHITE);
+		  plot.getRangeAxis().setLabelPaint(Color.WHITE);
 		  
 
 		  // Chart Legend Settings
 		  lineChart.getLegend().setBackgroundPaint(new Color(107, 106, 104));
-		  lineChart.getLegend().setItemPaint(new Color(200,200,200));
+		  lineChart.getLegend().setItemPaint(Color.WHITE);
 		  lineChart.getLegend().setBorder(0, 0, 0, 0);
 	   }
 
@@ -89,12 +96,17 @@ public class LineChart extends ApplicationFrame{
 		
 		XYSeriesCollection dataset = new XYSeriesCollection();
 		tempPeltier = new XYSeries("°C Peltier");
-		tempOutside = new XYSeries("°C Outside");
 		tempDHT = new XYSeries("°C Inside");
-				
+		tempOutside = new XYSeries("°C Outside");
+		
+		
+			
 		dataset.addSeries(tempPeltier);
 		dataset.addSeries(tempDHT);
 		dataset.addSeries(tempOutside);
+
+
+		
 
 		this.tempPeltier.setMaximumItemCount(50);
 		this.tempDHT.setMaximumItemCount(50);
@@ -104,16 +116,17 @@ public class LineChart extends ApplicationFrame{
 	}
 
 
+	// Return the chart
 	public JFreeChart getJChart() {
 		return lineChart;
 	}
 	
 	public void addData(float tempDHT,float tempOutside, float tempPeltier)
 	{
-		counter++;
-		this.tempPeltier.add(counter,tempPeltier);
-		this.tempDHT.add(counter,tempDHT);
-		this.tempOutside.add(counter,tempOutside);
+		counter++; // We add one more row to the counter of the array
+		this.tempPeltier.add(counter,tempPeltier); // Add value for PeltierTemp
+		this.tempDHT.add(counter,tempDHT); // Add value for DHT Temp
+		this.tempOutside.add(counter,tempOutside); // Add value for humidity
 
 	}
 }

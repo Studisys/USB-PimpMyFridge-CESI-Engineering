@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+
 
 import fr.cesi.pimpmyfridge.controller.IDataLink;
 import fr.cesi.pimpmyfridge.controller.IDataLinkListener;
@@ -40,24 +42,44 @@ public class Controller implements IDataLinkListener, IActionListener {
 		view.buttonTargetPlus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				Controller.this.action.setTempConsigne(action.getTargetTemp() + 0.5f);
-				String data = Float.toString(action.getTargetTemp());
-				ArduinoDataSource.writeData(data);
+				try {
+					ArduinoDataSource.output.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+	
+					System.out.println("IOException");
+					e.printStackTrace();
+				}
+				//String data = Float.toString(action.getTargetTemp());
+				// ArduinoDataSource.writeData(data);
+				// System.out.println("Writing : " + data);
 				// AJOUTER ICI EVENEMENT ENVOI DATA ARDUINO
 			}
 		});
 		view.buttonTargetMinus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionListener) {
 				Controller.this.action.setTempConsigne(action.getTargetTemp() - 0.5f);
-				String data = Float.toString(action.getTargetTemp());
-				ArduinoDataSource.writeData(data);
+				try {
+					ArduinoDataSource.output.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.err.println("IOException");
+					e.printStackTrace();
+				}
+				//String data = Float.toString(action.getTargetTemp());
+				//ArduinoDataSource.writeData(data);
+				//System.out.println("Writing : " + data);
 				// AJOUTER ICI EVENEMENT ENVOI DATA ARDUINO
 			}
 		});
 
 
+		// Listener on Window (e.g : if window is closed)
 		view.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent event0) {
-
+			
+			
+	    public void windowClosing(WindowEvent event0) {
+				// Close the data link
 				datalink.stop();
 			}
 		});
@@ -81,14 +103,14 @@ public class Controller implements IDataLinkListener, IActionListener {
 	public void onNewDataRead(final Model data) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-
-				view.labelTempOutside.setText(String.format("%.1f °C", data.getOutsideTemp()));
-				view.labelTempDHT.setText(String.format("%.1f °C", data.getDHTTemp()));
+				// Get the variables and update the test
 				view.labelTempPeltier.setText(String.format("%.1f °C", data.getPeltierTemp()));
+				view.labelTempDHT.setText(String.format("%.1f °C", data.getDHTTemp()));
+				view.labelTempOutside.setText(String.format("%.1f °C", data.getOutsideTemp()));
 				view.labelHumidity.setText(String.format("%.1f", data.getHumidityPercent()) + "%");
 				
-
-				view.chart.addData((float)data.getDHTTemp(), (float)data.getOutsideTemp(), (float)data.getPeltierTemp() );
+				// Add new data to the chart
+				view.chart.addData((float)data.getPeltierTemp(), (float)data.getDHTTemp(), (float)data.getOutsideTemp());
 			}
 		});
 	}
@@ -125,15 +147,4 @@ public class Controller implements IDataLinkListener, IActionListener {
 	}
 
 	
-	@Override
-	public void onPowerStatusChanged(final boolean powerOn) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				
-				// Peltier Module
-				
-			}
-		});
-	}
-
 }

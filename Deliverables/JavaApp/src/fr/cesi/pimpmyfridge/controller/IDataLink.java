@@ -14,10 +14,10 @@ public interface IDataLink {
 	public void stop();
 	
 	
-	public void addListener(IDataLinkListener obs);
+	public void addListener(IDataLinkListener observer);
 	
 	
-	public void removeListener(IDataLinkListener obs);
+	public void removeListener(IDataLinkListener observer);
 	
 	
 	public void notifyListeners(Model data);

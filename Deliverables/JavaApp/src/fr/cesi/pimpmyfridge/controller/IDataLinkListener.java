@@ -7,7 +7,5 @@ public interface IDataLinkListener {
 	
 	public void onNewDataRead(Model data);
 
-	
-	public void onPowerStatusChanged(boolean powerOn);
-	
+
 }

@@ -21,27 +21,29 @@ import gnu.io.SerialPortEventListener;
 
 public class ArduinoDataSource extends ArduinoConnection implements SerialPortEventListener {
 	
-	
+	// Timeout value
 	public static final int TIME_OUT = 2000;
 	
-	
+	// Baud Rate (Bit/s transmitted, default is 9600)
 	public static final int DATA_RATE = 9600;
 	
-	
-	private static final String DataIdentifier = "D:";
-	
+	// Message if there's nothing in the incoming frame
 	private static final String EmptyBufferErrorMessage = "Underlying input stream returned zero bytes";
 	
-	//private static final int FIELD_NUMBER = 4;
+	// Identifier in our incoming frame
+	private static final String DataID = "D:";
+	
+	// Number of fields in the frame
+	private static final int FIELD_NUMBER = 4;
+	
 	
 	public SerialPort serialPort;
 	
-	
 	public BufferedReader input;
-	
 	
 	public static OutputStream output;
 
+	
 	@Override
 	public void init() throws Throwable {
 		
@@ -98,24 +100,26 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 	}
 
 	@Override
+	// Method to start the data link
 	public void start() {
 		try {
 			System.out.println("[ArduinoInput] Link Start !");
-			serialPort.addEventListener(this);
-			serialPort.notifyOnDataAvailable(true);
+			serialPort.addEventListener(this); // We listen on it
+			serialPort.notifyOnDataAvailable(true); // Notify if there's data available on the serial link
 		}
 		catch (Throwable e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException(e); // If an error occurs
 		}
 		
 	}
 
 	@Override
+	// Method to properly close the Serial link on program close
 	public synchronized void stop() {
 		if (serialPort != null) {
 			System.out.println("[ArduinoInput] Link Stopped !");
-			serialPort.removeEventListener();
-			serialPort.close();
+			serialPort.removeEventListener(); // We don't listen anymore
+			serialPort.close(); // We close the data link
 		}
 	}
 
@@ -131,41 +135,48 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 		
 		try {
 			String inputLine = input.readLine();
-			if (inputLine.startsWith(DataIdentifier)) {
+			// If we can read a special identifier from the string (to identify it)
+			if (inputLine.startsWith(DataID)) {
 				
-				String[] tokens = inputLine.substring(2).split(";", 4);
+				// We split, in an array of strings, the received frame intro 4 fields (delimited with ";")
+				String[] tokens = inputLine.substring(2).split(";", FIELD_NUMBER);
 				
-				if (tokens.length != 4) {
-					System.err.println("[Arduino] Invalid data message (message does not have " + "4" + "fields.");
+				// If there's not 4 fields, then the message is probably garbage
+				if (tokens.length != FIELD_NUMBER) {
+					System.err.println("[Arduino] Invalid data message (message does not have " + "4 " + "fields. Received message is : " + inputLine + ")");
 					return;
 				}
-				
+				// We convert all the values into Float values and put them in an array of Float
 				float[] values = parseFloatArray(tokens);
 				
+				// Display the received frame in console
+				System.out.println("Received the following frame : " + inputLine);
 				
-				// We notify for 4 values : Peltier, DHT Temp, Outside Temp and DHT Humidity
+				// We notify for 4 new values : Peltier, DHT Temp, Outside Temp and DHT Humidity
 				notifyListeners(new Model(values[0], values[1], values[2], values[3]));
 			}
 			
 			
 			else {
+				// If the frame is not valid
 				System.err.println("[ArduinoInput] Message received is unknown (Invalid)");
 			}
 		}
 		catch (IOException e) {
 			if (e.getMessage().equals(EmptyBufferErrorMessage)) {
-				
+				// We don't have to display any error in cause because there's nothing on the serial link,
+				// so we remove any System.out/err here.
 			}
 			else {
-				System.err.println(String.format("[ArduinoInput] Error %s", e.toString()));
+				
 			}
 		}
 		catch (Throwable e) {
-			System.err.println(String.format("[ArduinoInput] Error %s", e.toString()));
+			System.err.println(String.format("[ArduinoInput] Error %s", e.toString())); // Show the error
 		}
+		
 
 	}
-
 	private float[] parseFloatArray(String[] tokens) {
 		float[] r = new float[tokens.length];
 		int i = 0;

@@ -22,13 +22,13 @@ public abstract class ArduinoConnection implements IDataLink {
 	}
 	
 	@Override
-	public void addListener(IDataLinkListener obs) {
-		listeners.add(obs);
+	public void addListener(IDataLinkListener observer) {
+		listeners.add(observer);
 	}
 	
 	@Override
-	public void removeListener(IDataLinkListener obs) {
-		listeners.remove(obs);
+	public void removeListener(IDataLinkListener observer) {
+		listeners.remove(observer);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public abstract class ArduinoConnection implements IDataLink {
 		}
 		listeners.forEach(new Consumer<IDataLinkListener>() {
 			public void accept(IDataLinkListener observer) {
-				observer.onPowerStatusChanged(powerOn);
+				//observer.onPowerStatusChanged(powerOn);
 			}
 		});
 	}

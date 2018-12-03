@@ -1,18 +1,22 @@
+// Package
 package fr.cesi.pimpmyfridge.controller;
 
+// Java Imports
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
+// Project Package Imports
 import fr.cesi.pimpmyfridge.controller.IAction;
 import fr.cesi.pimpmyfridge.controller.IActionListener;
 import fr.cesi.pimpmyfridge.model.Model;
 
+
+// 
 public class ActionApp implements IAction {
 	
-	protected float targetTemp = 10.0f;
-	protected boolean consigneAllumage = false;
+	protected float targetTemp = 15.0f; 	// Default Target Temperature
 	
 	protected double histoIn;
 	protected Date histoDate;
@@ -28,16 +32,15 @@ public class ActionApp implements IAction {
 		this.listeners = new ArrayList<IActionListener>();
 	}
 	
+	
 	@Override
 	public void onNewDataRead(Model data) {
-
 		detectCondensation(data);
-		
 		detectTempAnomaly(data);
-		
 	}
 
 	
+	// Method to detect temperature anomaly
 	protected void detectTempAnomaly(Model data) {
 		
 		boolean isTempAnomaly = alertTempAnomaly;
@@ -57,6 +60,7 @@ public class ActionApp implements IAction {
 		}
 	}
 
+	// Method to detect a condensation risk
 	protected void detectCondensation(Model data) {
 		
 		double h = data.getHumidityPercent() / 100;
@@ -68,8 +72,9 @@ public class ActionApp implements IAction {
 		boolean isCondensation = (tempRosee >= data.getDHTTemp());
 		if (isCondensation != alertCondensation) {
 			
+			// Set variable to true
 			alertCondensation = isCondensation;
-			
+			// Trigger Notification from changement
 			notifyAlertCondensation(isCondensation);
 		}
 	}
@@ -78,29 +83,30 @@ public class ActionApp implements IAction {
 	public void setTempConsigne(float targetTemp) {
 		
 		if (targetTemp != this.targetTemp) {
-			
+			// Set variable with new value
 			this.targetTemp = targetTemp;
-			
+			// Trigger Notification from changement
 			notifyTargetTempChanged(targetTemp);
 		}
 	}
 
 	@Override
-	public void addListener(IActionListener obs) {
-		this.listeners.add(obs);
+	// Add listener
+	public void addListener(IActionListener observer) {
+		this.listeners.add(observer);
 	}
 
 	@Override
-	public void removeListener(IActionListener obs) {
-		this.listeners.remove(obs);
+	public void removeListener(IActionListener observer) {
+		this.listeners.remove(observer);
 	}
 
 	@Override
 	public void notifyTargetTempChanged(final double targetTemp) {
 		System.out.println("[NewAppEvent] New Target Temperature : " + targetTemp);
 		this.listeners.forEach(new Consumer<IActionListener>() {
-			public void accept(IActionListener obs) {
-				obs.onTargetTempChanged(targetTemp);
+			public void accept(IActionListener observer) {
+				observer.onTargetTempChanged(targetTemp);
 			}
 		});
 	}
@@ -110,8 +116,8 @@ public class ActionApp implements IAction {
 	public void notifyAlertCondensation(final boolean state) {
 		System.out.println("[AIAlert] Condensation Risk!");
 		this.listeners.forEach(new Consumer<IActionListener>() {
-			public void accept(IActionListener obs) {
-				obs.onAlertCondensationChanged(state);
+			public void accept(IActionListener observer) {
+				observer.onAlertCondensationChanged(state);
 			}
 		});
 	}
@@ -121,32 +127,29 @@ public class ActionApp implements IAction {
 		System.out.println("[AIAlert] Abnormal Temperature!");
 		this.listeners.forEach(new Consumer<IActionListener>() {
 			@Override
-			public void accept(IActionListener obs) {
-				obs.onAlertTempAnomalyChanged(state);
+			public void accept(IActionListener observer) {
+				observer.onAlertTempAnomalyChanged(state);
 			}
 		});
 	}
 
+	// Getter : get Target Temperature
 	@Override
 	public float getTargetTemp() {
 		return targetTemp;
 	}
 
 
+	// Getter : is there condensation ?
 	@Override
 	public boolean isAlertCondensation() {
 		return alertCondensation;
 	}
 
+	// Getter : is there a temperature anomaly ?
 	@Override
 	public boolean isTempAnomaly() {
 		return alertTempAnomaly;
-	}
-
-	@Override
-	public void onPowerStatusChanged(boolean powerOn) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
