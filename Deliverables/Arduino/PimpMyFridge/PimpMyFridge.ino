@@ -119,12 +119,6 @@ void readSensors()
   DHT_Temperature = readDHTTemperature(); // Read Temperature from DHT Module;
   DHT_Humidity = readDHTHumidity(); // Read Humidity from DHT Module
   Dewpoint = getAtmoDewpoint();
-  // Every 2 seconds, read values from DHT Module (as values need to be read in a 2 sec interval)
-  /*if((millis() - rolltime) >= 0) {
-    DHT_Temperature = readDHTTemperature(); // Read Temperature from DHT Module
-    DHT_Humidity = readDHTHumidity(); // Read Humidity from DHT Module
-    rolltime += TWOFACED;
-    }*/
 }
 
 
@@ -166,8 +160,8 @@ void sendSerialData() {
   Serial.print(outsideTemperature);
   Serial.print(";"); // Separator
   Serial.print(DHT_Humidity);
-  /*Serial.print(";");
-  Serial.print(Dewpoint);*/
+  Serial.print(";");
+  Serial.print(Dewpoint);
   Serial.println(); // New line = new measurements
 }
 

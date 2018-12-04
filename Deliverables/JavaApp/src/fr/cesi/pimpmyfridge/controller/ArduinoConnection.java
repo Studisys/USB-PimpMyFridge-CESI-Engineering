@@ -40,23 +40,7 @@ public abstract class ArduinoConnection implements IDataLink {
 		});
 	}
 	
-	@Override
-	public void notifyListeners(final boolean powerOn) {
-		
-		if (powerOn) {
-			this.powerOnTime = new Date();
-		}
-		else {
-			this.tempsAllumage = getPowerUptime();
-			this.powerOnTime = null;
-		}
-		listeners.forEach(new Consumer<IDataLinkListener>() {
-			public void accept(IDataLinkListener observer) {
-				//observer.onPowerStatusChanged(powerOn);
-			}
-		});
-	}
-
+	
 	protected void sleep(long duration) {
 		try {
 			Thread.sleep(duration);

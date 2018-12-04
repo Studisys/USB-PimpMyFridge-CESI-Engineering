@@ -65,29 +65,27 @@ public class ActionApp implements IAction {
 	// Method to detect a condensation risk
 	protected void detectCondensation(Model data) {
 		
+		// Relative Humidity
 		double h = data.getHumidityPercent() / 100;
 		
+		// Dewpoint calculation
+		double dewPoint = Math.pow(h , 1.0/8) * (112 + (0.9 * data.getDHTTemp())) + (0.1 * data.getOutsideTemp()) - 112;
 		
-		double tempRosee = Math.pow(h , 1.0/8) * (112 + (0.9 * data.getDHTTemp())) + (0.1 * data.getOutsideTemp()) - 112;
 		
+		// Set to true if the internal temp is below the dewpoint, else set to false
+		boolean isCondensation = (dewPoint >= data.getDHTTemp());
 		
-		boolean isCondensation = (tempRosee >= data.getDHTTemp());
+		// If there's condensation
 		if (isCondensation != alertCondensation) {
 			
 			// Set variable to true
 			alertCondensation = isCondensation;
-			// Trigger Notification from changement
+			// Trigger Notification from change
 			notifyAlertCondensation(isCondensation);
 		}
 	}
 	
-	
-	// Detect Door Status
-	protected void detectDoorStatus (Model data) {
-		
-	}
 
-	
 	// Set the Target Temperature
 	@Override
 	public void setTempConsigne(float targetTemp) {

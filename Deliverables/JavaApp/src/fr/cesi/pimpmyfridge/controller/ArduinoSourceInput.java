@@ -80,15 +80,7 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 		this.listeners.remove(observer);
 	}
 
-	// Notify the listeners when there's a change
-	@Override
-	public void notifyListeners(final boolean powerOn) {
-		listeners.forEach(new Consumer<IDataLinkListener>() {
-			public void accept(IDataLinkListener observer) {
-				//observer.onPowerStatusChanged(powerOn);
-			}
-		});
-	}
+
 
 	@Override
 	public void onNewDataRead(Model data) {
