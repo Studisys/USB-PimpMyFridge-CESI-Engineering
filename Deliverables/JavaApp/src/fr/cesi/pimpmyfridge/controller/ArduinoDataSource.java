@@ -205,6 +205,12 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 			System.err.println(String.format("[SerialWrite] Could not write data to serial, %s : %s", e.getClass().getSimpleName(), e.getMessage()));
 		}
 	}
+
+	@Override
+	public void notifyListeners(boolean powerOn) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

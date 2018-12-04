@@ -22,5 +22,6 @@ public interface IDataLink {
 	
 	public void notifyListeners(Model data);
 	
+	public void notifyListeners(boolean powerOn);
 
 }

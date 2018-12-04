@@ -68,11 +68,11 @@ public class ActionApp implements IAction {
 		double h = data.getHumidityPercent() / 100;
 		
 		// Dewpoint calculation
-		double dewPoint = Math.pow(h , 1.0/8) * (112 + (0.9 * data.getDHTTemp())) + (0.1 * data.getOutsideTemp()) - 112;
+		double dewPoint = Math.pow(h , 1.0/8) * (112 + (0.9 * data.getPeltierTemp())) + (0.1 * data.getDHTTemp()) - 112;
 		
 		
 		// Set to true if the internal temp is below the dewpoint, else set to false
-		boolean isCondensation = (dewPoint >= data.getDHTTemp());
+		boolean isCondensation = (dewPoint >= data.getPeltierTemp());
 		
 		// If there's condensation
 		if (isCondensation != alertCondensation) {
