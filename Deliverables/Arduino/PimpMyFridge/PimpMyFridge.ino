@@ -235,7 +235,7 @@ void actionableIntelligence()
 double getAtmoDewpoint()
 {
   //double Tr = ((237.7)*(((17.27*DHT_Temperature)/(237.7+DHT_Temperature))+log(DHT_Humidity*0.001)))/((17.27)*(((17.27*DHT_Temperature)/(17.27+DHT_Temperature))+log(DHT_Humidity*0.001)));
-  double Tr = (237.7 * (((17.27 * peltierTemperature) / (237.7 + peltierTemperature)) + log(DHT_Temperature / 100))) / (17.27 - (((17.27 * peltierTemperature) / (237.7 + peltierTemperature)) + log(DHT_Temperature / 100)));
+  double Tr = (237.7 * (((17.27 * DHT_Temperature) / (237.7 + DHT_Temperature)) + log(DHT_Humidity / 100))) / (17.27 - (((17.27 * DHT_Temperature) / (237.7 + DHT_Temperature)) + log(DHT_Humidity / 100)));
   return Tr;
 }
 
