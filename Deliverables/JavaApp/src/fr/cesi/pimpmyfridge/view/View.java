@@ -24,6 +24,7 @@ public class View extends JFrame {
 	public JLabel labelTempDHT;
 	public JLabel labelTempOutside;
 	public JLabel labelTempPeltier;
+	public JLabel labelDewTemp;
 	public JLabel labelHumidity;
 	public JLabel alertCondensation;
 	public JLabel alertTempAnomaly;
@@ -65,7 +66,7 @@ public class View extends JFrame {
 		labelTempDHT.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
-		JLabel labelExternalTemperature = new JLabel("°C Externe");
+		JLabel labelExternalTemperature = new JLabel("°C Outside");
 		labelExternalTemperature.setForeground(Color.WHITE); // Set White Color
 		labelExternalTemperature.setHorizontalAlignment(SwingConstants.CENTER); // Aligned to center
 		labelExternalTemperature.setFont(new Font("Sans Serif", Font.PLAIN, 16));
@@ -74,6 +75,17 @@ public class View extends JFrame {
 		labelTempOutside.setFont(new Font("Sans Serif", Font.PLAIN, 22));
 		labelTempOutside.setForeground(new Color(34,139,34));
 		labelTempOutside.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		
+		JLabel labelTempDew = new JLabel("°C Dew");
+		labelTempDew.setForeground(Color.WHITE); // Set White Color
+		labelTempDew.setHorizontalAlignment(SwingConstants.CENTER); // Aligned to center
+		labelTempDew.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+		
+		labelDewTemp = new JLabel("0\u00B0 C"); // °C
+		labelDewTemp.setFont(new Font("Sans Serif", Font.PLAIN, 22));
+		labelDewTemp.setForeground(new Color(153, 51, 255));
+		labelDewTemp.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
 		/* Text for the Humidity Section */
@@ -157,7 +169,7 @@ public class View extends JFrame {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(panelCenter, GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panelLeft, GroupLayout.PREFERRED_SIZE, 512, GroupLayout.PREFERRED_SIZE)
+							.addComponent(panelLeft, GroupLayout.PREFERRED_SIZE, 510, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(panelRight, GroupLayout.PREFERRED_SIZE, 100, Short.MAX_VALUE)))
 					.addContainerGap())
@@ -235,6 +247,10 @@ public class View extends JFrame {
 						.addComponent(labelExternalTemperature, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panelLeft.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(labelDewTemp, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(labelTempDew, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panelLeft.createParallelGroup(Alignment.LEADING, false)
 						.addComponent(labelHumidity, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(labelHumidityPercent, GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE))
 					.addContainerGap(308, Short.MAX_VALUE))
@@ -249,12 +265,14 @@ public class View extends JFrame {
 						.addComponent(labelPeltierTemperature)
 						.addComponent(labelInternalTemperature)
 						.addComponent(labelExternalTemperature)
+						.addComponent(labelTempDew)
 						.addComponent(labelHumidityPercent))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panelLeft.createParallelGroup(Alignment.LEADING)
 						.addComponent(labelTempPeltier, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
 						.addComponent(labelTempDHT, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
 						.addComponent(labelTempOutside, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+						.addComponent(labelDewTemp, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
 						.addComponent(labelHumidity, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
 )
 					.addContainerGap())

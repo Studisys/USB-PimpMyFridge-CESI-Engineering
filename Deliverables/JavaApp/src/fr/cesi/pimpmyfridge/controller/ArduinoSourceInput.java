@@ -21,6 +21,7 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 	
 	private ArrayList<IDataLinkListener> listeners;
 
+	// List sources for Serial Link
 	public ArduinoSourceInput(IDataLink source, int length) {
 		this.source = source;
 		this.length = length;
@@ -28,6 +29,7 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 		listeners = new ArrayList<IDataLinkListener>();
 	}
 	
+	// Listener notifier when there's new data
 	@Override
 	public void notifyListeners(Model data) {
 		
@@ -35,6 +37,7 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 				data.getPeltierTemp(),
 				data.getDHTTemp(),
 				data.getOutsideTemp(),
+				data.getDewTemp(),
 				data.getHumidityPercent()
 		);
 		listeners.forEach(new Consumer<IDataLinkListener>() {
@@ -81,7 +84,7 @@ public class ArduinoSourceInput implements IDataLink, IDataLinkListener {
 	}
 
 
-
+	// When there's new incoming data from the Arduino
 	@Override
 	public void onNewDataRead(Model data) {
 		

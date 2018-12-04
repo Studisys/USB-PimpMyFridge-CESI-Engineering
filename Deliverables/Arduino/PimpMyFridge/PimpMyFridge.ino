@@ -92,7 +92,7 @@ void setup()
 
 void loop()
 {
- 
+
   readSerialData();
   readSensors(); // Read values from sensors
   getAtmoDewpoint();
@@ -159,9 +159,9 @@ void sendSerialData() {
   Serial.print(";");
   Serial.print(outsideTemperature);
   Serial.print(";"); // Separator
-  Serial.print(DHT_Humidity);
-  Serial.print(";");
   Serial.print(Dewpoint);
+  Serial.print(";");
+  Serial.print(DHT_Humidity);
   Serial.println(); // New line = new measurements
 }
 
@@ -193,10 +193,10 @@ void readSerialData()
 void actionableIntelligence()
 {
   float differenceOfTemperature = DHT_Temperature - targetTemperature;
-  float pourcentError = (5/100)*targetTemperature;
-  
-  if (abs(pourcentError)<abs(differenceOfTemperature)){
-    if(pourcentError<differenceOfTemperature){
+  float pourcentError = (5 / 100) * targetTemperature;
+
+  if (abs(pourcentError) < abs(differenceOfTemperature)) {
+    if (pourcentError < differenceOfTemperature) {
       //Temperature trop elevee
       //Refroidir
       digitalWrite(pinPeltier, HIGH);
@@ -207,12 +207,12 @@ void actionableIntelligence()
       Serial.print(targetTemperature);
       Serial.println(" C).");
       //Serial.println();
-      
 
-        
-          }
-    else if(pourcentError>differenceOfTemperature){
-    //Temperature trop basse
+
+
+    }
+    else if (pourcentError > differenceOfTemperature) {
+      //Temperature trop basse
       //Couper alim
       digitalWrite(pinPeltier, LOW);
       Serial.print("[ArduinoOutput] Too cold. Stopping cooling. ");
@@ -224,7 +224,7 @@ void actionableIntelligence()
       //Serial.println();
     }
   }
-  else if (abs(pourcentError)>abs(differenceOfTemperature)){
+  else if (abs(pourcentError) > abs(differenceOfTemperature)) {
     //Don't touch it bro all is right
   }
 }
@@ -235,7 +235,7 @@ void actionableIntelligence()
 double getAtmoDewpoint()
 {
   //double Tr = ((237.7)*(((17.27*DHT_Temperature)/(237.7+DHT_Temperature))+log(DHT_Humidity*0.001)))/((17.27)*(((17.27*DHT_Temperature)/(17.27+DHT_Temperature))+log(DHT_Humidity*0.001)));
-  double Tr = (237.7*(((17.27*DHT_Temperature)/(237.7+DHT_Temperature))+log(DHT_Humidity/100)))/(17.27-(((17.27*DHT_Temperature)/(237.7+DHT_Temperature))+log(DHT_Humidity/100)));
+  double Tr = (237.7 * (((17.27 * DHT_Temperature) / (237.7 + DHT_Temperature)) + log(DHT_Humidity / 100))) / (17.27 - (((17.27 * DHT_Temperature) / (237.7 + DHT_Temperature)) + log(DHT_Humidity / 100)));
   return Tr;
 }
 

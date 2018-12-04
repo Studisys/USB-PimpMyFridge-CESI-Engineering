@@ -6,14 +6,16 @@ public class Model {
 	private double tempIn; // Temperature (DHT)
 	private double tempPeltier; // Temperature (Peltier Module / Termistor)
 	private double tempOut; // Temperature (DHT Out)
+	private double tempDew; // Condensation temperature (dewpoint)
 	private double humidity; // Humidity (DHT)
 
 
 	// Method to set the variables
-	public Model(double tempIn, double tempPeltier, double tempOut, double humidity) {
+	public Model(double tempIn, double tempPeltier, double tempOut, double tempDew, double humidity) {
 		this.tempIn = tempIn;
 		this.tempPeltier = tempPeltier;
 		this.tempOut = tempOut;
+		this.tempDew = tempDew;
 		this.humidity = humidity;		
 	}
 	
@@ -38,10 +40,17 @@ public class Model {
 	}
 	
 	
+	// Return the Dew temperature (condensation temperature)
+	public double getDewTemp()
+	{
+		return tempDew;
+	}
+	
+	
 	// Return a pre-formatted string
 	@Override
 	public String toString() {
-		return String.format("Tin=%s°C Tpelt=%s°C Tout=%s°C H=%s%%", tempIn, tempPeltier, tempOut, humidity);
+		return String.format("Tin=%s°C Tpelt=%s°C Tout=%s°C Tdew=%s°C H=%s%%", tempIn, tempPeltier, tempOut, tempDew, humidity);
 	}
 
 }

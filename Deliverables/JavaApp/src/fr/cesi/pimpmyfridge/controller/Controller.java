@@ -80,6 +80,7 @@ public class Controller implements IDataLinkListener, IActionListener {
 		view.addWindowListener(new WindowAdapter() {
 			
 			
+		// Properly closing data link (closing Serial link) when window is closed
 	    public void windowClosing(WindowEvent event0) {
 				// Close the data link
 				datalink.stop();
@@ -109,10 +110,11 @@ public class Controller implements IDataLinkListener, IActionListener {
 				view.labelTempPeltier.setText(String.format("%.1f °C", data.getPeltierTemp()));
 				view.labelTempDHT.setText(String.format("%.1f °C", data.getDHTTemp()));
 				view.labelTempOutside.setText(String.format("%.1f °C", data.getOutsideTemp()));
+				view.labelDewTemp.setText(String.format("%.1f °C", data.getDewTemp()));
 				view.labelHumidity.setText(String.format("%.1f", data.getHumidityPercent()) + "%");
 				
 				// Add new data to the chart
-				view.chart.addData((float)data.getDHTTemp(), (float)data.getOutsideTemp(), (float)data.getPeltierTemp());
+				view.chart.addData((float)data.getDHTTemp(), (float)data.getOutsideTemp(), (float)data.getPeltierTemp(), (float)data.getDewTemp());
 			}
 		});
 	}

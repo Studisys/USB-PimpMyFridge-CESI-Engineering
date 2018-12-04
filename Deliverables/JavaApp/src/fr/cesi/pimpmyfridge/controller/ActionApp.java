@@ -38,7 +38,6 @@ public class ActionApp implements IAction {
 	public void onNewDataRead(Model data) {
 		detectCondensation(data);
 		detectTempAnomaly(data);
-		//detectDoorStatus(data);
 	}
 
 	

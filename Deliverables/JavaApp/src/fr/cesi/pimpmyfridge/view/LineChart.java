@@ -25,6 +25,7 @@ public class LineChart extends ApplicationFrame{
 	private XYSeries tempPeltier; // Peltier Temp
 	private XYSeries tempDHT; // DHT Temp Inside
 	private XYSeries tempOutside; // DHT Temp Outside
+	private XYSeries tempDew; // DHT Temp Outside
 
 
 	
@@ -79,6 +80,10 @@ public class LineChart extends ApplicationFrame{
 		  renderer.setSeriesPaint(2, new Color(34,139,34));
 		  renderer.setSeriesStroke(2,  new BasicStroke(2));
 		  
+		  renderer.setSeriesItemLabelPaint(3, new Color(153, 51, 255));
+		  renderer.setSeriesPaint(3, new Color(153, 51, 255));
+		  renderer.setSeriesStroke(3,  new BasicStroke(2));
+		  
 		  
 		  plot.getRangeAxis().setRange(new Range(10, 35)); 
 		  plot.getRangeAxis().setTickLabelPaint(Color.WHITE);
@@ -98,12 +103,14 @@ public class LineChart extends ApplicationFrame{
 		tempPeltier = new XYSeries("°C Peltier");
 		tempDHT = new XYSeries("°C Inside");
 		tempOutside = new XYSeries("°C Outside");
+		tempDew = new XYSeries("°C Dew");
 		
 		
 			
 		dataset.addSeries(tempPeltier);
 		dataset.addSeries(tempDHT);
 		dataset.addSeries(tempOutside);
+		dataset.addSeries(tempDew);
 
 
 		
@@ -111,6 +118,7 @@ public class LineChart extends ApplicationFrame{
 		this.tempPeltier.setMaximumItemCount(50);
 		this.tempDHT.setMaximumItemCount(50);
 		this.tempOutside.setMaximumItemCount(50);
+		this.tempDew.setMaximumItemCount(50);
 		
 		return dataset;
 	}
@@ -121,12 +129,13 @@ public class LineChart extends ApplicationFrame{
 		return lineChart;
 	}
 	
-	public void addData(float tempDHT,float tempOutside, float tempPeltier)
+	public void addData(float tempDHT,float tempOutside, float tempPeltier, float tempDew)
 	{
 		counter++; // We add one more row to the counter of the array
 		this.tempPeltier.add(counter,tempPeltier); // Add value for PeltierTemp
 		this.tempDHT.add(counter,tempDHT); // Add value for DHT Temp
-		this.tempOutside.add(counter,tempOutside); // Add value for humidity
+		this.tempOutside.add(counter,tempOutside); // Add value for outside temp
+		this.tempDew.add(counter,tempDew); // Add value for Dew temp
 
 	}
 }

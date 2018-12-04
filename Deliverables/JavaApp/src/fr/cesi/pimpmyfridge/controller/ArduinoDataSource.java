@@ -36,7 +36,7 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 	private static final String OutputID = "[ArduinoOutput]";
 	
 	// Number of fields in the frame
-	private static final int FIELD_NUMBER = 4;
+	private static final int FIELD_NUMBER = 5;
 	
 	
 	public SerialPort serialPort;
@@ -95,10 +95,9 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 				SerialPort.DATABITS_8,
 				SerialPort.STOPBITS_1,
 				SerialPort.PARITY_NONE);
-
 		
 		input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
-		output = serialPort.getOutputStream();
+		output = serialPort.getOutputStream(); // Store the incoming frame from the serial link in the output object 
 	}
 
 	@Override
@@ -125,6 +124,7 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 		}
 	}
 
+	// When there's data incoming from the Serial link (Arduino)
 	@Override
 	public synchronized void serialEvent(SerialPortEvent event0) {
 		
@@ -140,8 +140,8 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 			// If we can read a special identifier from the string (to identify it)
 			if (inputLine.startsWith(DataID)) {
 				
-				// We split, in an array of strings, the received frame intro 4 fields (delimited with ";")
-				String[] tokens = inputLine.substring(2).split(";", FIELD_NUMBER);
+				// We split, in an array of strings, the received frame intro X fields (delimited with ";")
+				String[] tokens = inputLine.substring(2).split(";", FIELD_NUMBER); 
 				
 				// If there's not 4 fields, then the message is probably garbage
 				if (tokens.length != FIELD_NUMBER) {
@@ -155,7 +155,7 @@ public class ArduinoDataSource extends ArduinoConnection implements SerialPortEv
 				System.out.println("[ArduinoOutput] Received the following frame : " + inputLine);
 				
 				// We notify for 4 new values : Peltier, DHT Temp, Outside Temp and DHT Humidity
-				notifyListeners(new Model(values[0], values[1], values[2], values[3]));
+				notifyListeners(new Model(values[0], values[1], values[2], values[3], values[4]));
 			}
 			
 			else if (inputLine.startsWith(OutputID)) {
