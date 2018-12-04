@@ -29,6 +29,7 @@ public class View extends JFrame {
 	public JLabel alertCondensation;
 	public JLabel alertTempAnomaly;
 
+	// Buttons
 	public JButton buttonTargetPlus; // Target Temperature Button + (Plus)
 	public JButton buttonTargetMinus; // Target Temperature Button - (Minus)
 	
@@ -36,6 +37,7 @@ public class View extends JFrame {
 	// The chart
 	public LineChart chart;
 	
+	// Set the view
 	public View() {
 		
 		setBounds(100, 100, 1024, 768);
@@ -43,34 +45,34 @@ public class View extends JFrame {
 		setLocationRelativeTo(null);
 		setTitle("PimpMyFridge - CommandCenter");
 		
+		
+		// Graphical Properties for the Termistor Temperature Sensor
 		JLabel labelPeltierTemperature = new JLabel("°C Peltier (Internal)");
 		labelPeltierTemperature.setForeground(Color.WHITE); // Set White Color
 		labelPeltierTemperature.setHorizontalAlignment(SwingConstants.CENTER); // Aligned to center
-		labelPeltierTemperature.setFont(new Font("Sans Serif", Font.PLAIN, 16));
-		
-		
+		labelPeltierTemperature.setFont(new Font("Sans Serif", Font.PLAIN, 16));	
 		labelTempPeltier = new JLabel("0 \u00B0C"); // °C
 		labelTempPeltier.setFont(new Font("Sans Serif", Font.PLAIN, 22));
 		labelTempPeltier.setForeground(new Color(241, 61, 7));
 		labelTempPeltier.setHorizontalAlignment(SwingConstants.CENTER);
 		
+		
+		// Graphical Properties for the Internal DHT Temperature Sensor
 		JLabel labelInternalTemperature = new JLabel("°C Internal (DHT)");
 		labelInternalTemperature.setForeground(Color.WHITE); // Set White Color
 		labelInternalTemperature.setHorizontalAlignment(SwingConstants.CENTER); // Aligned to center
-		labelInternalTemperature.setFont(new Font("Sans Serif", Font.PLAIN, 16));
-		
-		
+		labelInternalTemperature.setFont(new Font("Sans Serif", Font.PLAIN, 16));		
 		labelTempDHT = new JLabel("0 \u00B0C"); // °C
 		labelTempDHT.setFont(new Font("Sans Serif", Font.PLAIN, 22));
 		labelTempDHT.setForeground(new Color(0, 174, 189));
 		labelTempDHT.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
+		// Graphical Properties for the External Temperature Sensor
 		JLabel labelExternalTemperature = new JLabel("°C Outside");
 		labelExternalTemperature.setForeground(Color.WHITE); // Set White Color
 		labelExternalTemperature.setHorizontalAlignment(SwingConstants.CENTER); // Aligned to center
 		labelExternalTemperature.setFont(new Font("Sans Serif", Font.PLAIN, 16));
-		
 		labelTempOutside = new JLabel("0\u00B0 C"); // °C
 		labelTempOutside.setFont(new Font("Sans Serif", Font.PLAIN, 22));
 		labelTempOutside.setForeground(new Color(34,139,34));

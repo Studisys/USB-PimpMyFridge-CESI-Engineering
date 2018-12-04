@@ -1,12 +1,4 @@
-// Notable Characteristics ///////////////////////////////////////////////////////////////
-// - The DHT-22 sampling rate is 0.5Hz, so be sure to delay by 2000ms between measures
-// - The Next Big Thing Is This Fridge
-// - 100% HACK PROOF !
-//////////////////////////////////////////////////////////////////////////////////////////
-
-
 // Libraries Includes ////////////////////////////////////////////////////////////////////
-// #include "Libraries/PiwmpMyFridge/PimpMyFridge.h" // Best library in that project, ha ! Includes everything needed
 
 #include <DHT.h>
 #include <DHT_U.h>
@@ -17,13 +9,10 @@
 // #define fridgePower 0 // Power On/Off the fridge
 #define DHTPININ 9
 #define DHTPINOUT 10
+
 #define pinTemperaturePeltier 0 // Read the values from the thermistor (Analog !)
-#define pinTemperatureOutside 1 // Read the values from the thermistor (Analog !)
-#define pinFan 5 // Control the fan on that pin (0/1)
-#define pinPeltier 3 // Control the Peltier Module on that pin (PWM !)
-#define pinOnboardLED 13 // Onboard LED
-#define pinOpenDetectorReceiver 7 // Pin to detect whether door is open or not
-#define pinOpenDetectorEmitter 8
+#define pinPeltier 2 // Control the Peltier Module on that pin (PWM !)
+
 #define DHTTYPE DHT22 // The DHT sensor is DHT22
 
 
@@ -39,19 +28,10 @@ double coeffCinside = 8.7264 * pow(10, -8);
 double resistanceInside = 9910;
 double voltageInside = 1023;
 
-// Termistor Outside Fridge
-double coeffAoutside = 1.12902 * pow(10, -3);
-double coeffBoutside = 2.3418 * pow(10, -4);
-double coeffCoutside = 8.7264 * pow(10, -8);
-double resistanceOutside = 9910;
-double voltageOutside = 1023;
-
-
 float targetTemperature = 18;
 
 String Data;
 
-String Target;
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -64,7 +44,6 @@ double peltierTemperature = 0; // Value of the temperature (°C) from the thermi
 double outsideTemperature = 0;
 //double targetTemperature = 0;
 double Dewpoint = 0;
-boolean isDoorOpen = 0;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -78,11 +57,7 @@ void setup()
   pinMode(DHTPININ, INPUT); //  Mesure sur le module DHT Intérieur
   pinMode(DHTPINOUT, INPUT); //  Mesure sur le module DHT Extérieur
   pinMode(pinTemperaturePeltier, INPUT); // Mesure à la thermistance
-  pinMode(pinOpenDetectorEmitter, OUTPUT); // Send signal for Door Detector
-  pinMode(pinOpenDetectorReceiver, INPUT); // Receive signal from Emitter for Door Detector
-  pinMode(pinOnboardLED, OUTPUT);
   pinMode(pinPeltier, OUTPUT);
-  pinMode(pinFan, OUTPUT);
 
   dhtIn.begin(); // Start DHT Sensor
   dhtOut.begin(); // Start DHT Sensor
@@ -91,17 +66,12 @@ void setup()
 void loop()
 {
 
-  readSerialData();
+  readSerialData(); // Read data from serial incoming from Java app
   readSensors(); // Read values from sensors
-  getAtmoDewpoint();
-  delay(500);
-  sendSerialData();
-  actionableIntelligence();
-  //Serial.print("String : ");
-  //Serial.println(Target);
-
-  //Serial.println(Data.length());
-  //Serial.println();
+  getAtmoDewpoint(); // Calculate the Dewpoint (condensation temperature)
+  delay(500); // Delay to slow things down
+  sendSerialData(); // Send data over Serial
+  actionableIntelligence(); // Peltier Module Control according to target temperature
 }
 
 
@@ -113,7 +83,6 @@ void readSensors()
 {
   peltierTemperature = readInsideTemperature(); // Read Temperature from Termistor on Peltier Module
   outsideTemperature = readOutsideTemperature(); // Read Temperature from Termistor outside Fridge
-  isDoorOpen = readOpenSensor(); // Check if Door is Open
   DHT_Temperature = readDHTTemperature(); // Read Temperature from DHT Module;
   DHT_Humidity = readDHTHumidity(); // Read Humidity from DHT Module
   Dewpoint = getAtmoDewpoint();
@@ -131,21 +100,6 @@ double convertRawToCelsius (double tempRaw, double coeffA, double coeffB, double
   return RSLT;
 }
 
-// Check if Door is Open or Not
-// TESTING REQUIRED !
-boolean readOpenSensor()
-{
-  digitalWrite(pinOpenDetectorEmitter, HIGH); // Emit Signal
-  if (digitalRead(pinOpenDetectorReceiver) == 0)
-  {
-    return true; // Door is open
-  }
-  else {
-    return false; // Door is closed
-  }
-  digitalWrite(pinOpenDetectorEmitter, LOW); // Stop Signal Emission
-}
-
 
 // Send data to the serial monitor
 // OK !
@@ -159,13 +113,12 @@ void sendSerialData() {
   Serial.print(";"); // Separator
   Serial.print(Dewpoint);
   Serial.print(";");
-  Serial.print(DHT_Humidity);
-  Serial.println(); // New line = new measurements
+  Serial.println(DHT_Humidity); // New line = new measurements
 }
 
 
 // Get data from the Java Program
-// TO ADAPT
+// OK
 void readSerialData()
 {
   // If new data available from the serial port
@@ -188,6 +141,7 @@ void readSerialData()
 
 
 // Command the parts of the Fridge
+// OK !
 void actionableIntelligence()
 {
   float differenceOfTemperature = peltierTemperature - targetTemperature;
@@ -229,13 +183,13 @@ void actionableIntelligence()
 
 
 // Get Dewpoint
-// NOK
+// OK
 double getAtmoDewpoint()
 {
-  //double Tr = ((237.7)*(((17.27*DHT_Temperature)/(237.7+DHT_Temperature))+log(DHT_Humidity*0.001)))/((17.27)*(((17.27*DHT_Temperature)/(17.27+DHT_Temperature))+log(DHT_Humidity*0.001)));
   double Tr = (237.7 * (((17.27 * DHT_Temperature) / (237.7 + DHT_Temperature)) + log(DHT_Humidity / 100))) / (17.27 - (((17.27 * DHT_Temperature) / (237.7 + DHT_Temperature)) + log(DHT_Humidity / 100)));
   return Tr;
 }
+
 
 // Read Temperature from Termistor on Peltier Module
 // OK !
@@ -247,8 +201,6 @@ double readInsideTemperature()
 }
 
 
-
-
 // Read Temperature from Outside Termistor
 // OK !
 float readOutsideTemperature()
@@ -256,6 +208,7 @@ float readOutsideTemperature()
   float t = dhtOut.readTemperature();
   return t;
 }
+
 
 // Read Temperature from DHT Module
 // OK !

@@ -84,9 +84,7 @@ public class Main {
 			}
 			// If an error occurs
 			catch (Throwable e) {
-				System.err.println(String.format("[Implementation] ERROR - Can't get data from Arduino. Terminating...",
-						implementation.getClass().getSimpleName(),
-						e.getMessage(), e.getClass().getSimpleName()));
+				System.err.println("[Implementation] ERROR - Can't get data from Arduino. Terminating...");
 				continue;
 			}
 			// Return the implementation
