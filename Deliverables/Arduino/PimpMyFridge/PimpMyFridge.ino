@@ -20,14 +20,12 @@
 #define pinTemperaturePeltier 0 // Read the values from the thermistor (Analog !)
 #define pinTemperatureOutside 1 // Read the values from the thermistor (Analog !)
 #define pinFan 5 // Control the fan on that pin (0/1)
-#define pinPeltier 6 // Control the Peltier Module on that pin (PWM !)
+#define pinPeltier 3 // Control the Peltier Module on that pin (PWM !)
 #define pinOnboardLED 13 // Onboard LED
 #define pinOpenDetectorReceiver 7 // Pin to detect whether door is open or not
 #define pinOpenDetectorEmitter 8
 #define DHTTYPE DHT22 // The DHT sensor is DHT22
 
-#define TWOFACED (1000UL * 2) // Define "2 seconds" in Arduino language, without RTC Module
-unsigned long rolltime = millis() + TWOFACED;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -96,7 +94,7 @@ void loop()
   readSerialData();
   readSensors(); // Read values from sensors
   getAtmoDewpoint();
-  delay(2000);
+  delay(500);
   sendSerialData();
   actionableIntelligence();
   //Serial.print("String : ");
@@ -192,7 +190,7 @@ void readSerialData()
 // Command the parts of the Fridge
 void actionableIntelligence()
 {
-  float differenceOfTemperature = DHT_Temperature - targetTemperature;
+  float differenceOfTemperature = peltierTemperature - targetTemperature;
   float pourcentError = (5 / 100) * targetTemperature;
 
   if (abs(pourcentError) < abs(differenceOfTemperature)) {
