@@ -73,7 +73,7 @@ public class View extends JFrame {
 		
 		labelTempOutside = new JLabel("0\u00B0 C"); // °C
 		labelTempOutside.setFont(new Font("Sans Serif", Font.PLAIN, 22));
-		labelTempOutside.setForeground(new Color(34,139,34));
+		labelTempOutside.setForeground(new Color(34, 212, 34));
 		labelTempOutside.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
@@ -84,7 +84,7 @@ public class View extends JFrame {
 		
 		labelDewTemp = new JLabel("0\u00B0 C"); // °C
 		labelDewTemp.setFont(new Font("Sans Serif", Font.PLAIN, 22));
-		labelDewTemp.setForeground(new Color(153, 51, 255));
+		labelDewTemp.setForeground(new Color(200, 51, 255));
 		labelDewTemp.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
@@ -97,7 +97,7 @@ public class View extends JFrame {
 		labelHumidity = new JLabel("0 %");
 		labelHumidity.setFont(new Font("Sans Serif", Font.PLAIN, 22));
 		labelHumidity.setBackground(new Color(66, 255, 66));
-		labelHumidity.setForeground(Color.ORANGE);
+		labelHumidity.setForeground(new Color(248, 224, 47));
 		labelHumidity.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		
@@ -108,7 +108,7 @@ public class View extends JFrame {
 		
 		
 		labelTargetTemp = new JLabel("0 \u00B0C");
-		labelTargetTemp.setForeground(Color.ORANGE);
+		labelTargetTemp.setForeground(Color.WHITE);
 		labelTargetTemp.setFont(new Font("Sans Serif", Font.PLAIN, 28));
 		labelTargetTemp.setHorizontalAlignment(SwingConstants.CENTER);
 		

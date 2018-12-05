@@ -42,7 +42,6 @@ public class LineChart extends ApplicationFrame{
 	         PlotOrientation.VERTICAL,
 	         true,true,false);
 	      lineChart.setBackgroundPaint(new Color(107, 106, 104));
-	      lineChart.getTitle().setPaint(new Color(255,255,255));
 	      
 	      setTitle(null);
 	      getJChart().setTitle((String)null);
@@ -54,7 +53,7 @@ public class LineChart extends ApplicationFrame{
 	      counter = 0;
 	      
 	      XYPlot plot = lineChart.getXYPlot();
-		  mark = new ValueMarker(0, Color.ORANGE, new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 12.0f, new float[] {5.0f}, 0.0f));
+		  mark = new ValueMarker(0, new Color(255, 255, 255), new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 12.0f, new float[] {5.0f}, 0.0f));
 		  plot.addRangeMarker(mark, Layer.BACKGROUND);
 		  
 		  plot.setBackgroundPaint(new Color(107, 106, 104));
@@ -76,12 +75,12 @@ public class LineChart extends ApplicationFrame{
 		  renderer.setSeriesPaint(1, new Color(0, 174, 189));
 		  renderer.setSeriesStroke(1,  new BasicStroke(2));
 		  
-		  renderer.setSeriesItemLabelPaint(2, new Color(34,139,34));
-		  renderer.setSeriesPaint(2, new Color(34,139,34));
+		  renderer.setSeriesItemLabelPaint(2, new Color(34, 212, 34));
+		  renderer.setSeriesPaint(2, new Color(34, 212, 34));
 		  renderer.setSeriesStroke(2,  new BasicStroke(2));
 		  
-		  renderer.setSeriesItemLabelPaint(3, new Color(153, 51, 255));
-		  renderer.setSeriesPaint(3, new Color(153, 51, 255));
+		  renderer.setSeriesItemLabelPaint(3, new Color(200, 51, 255));
+		  renderer.setSeriesPaint(3, new Color(200, 51, 255));
 		  renderer.setSeriesStroke(3,  new BasicStroke(2));
 		  
 		  
@@ -115,10 +114,10 @@ public class LineChart extends ApplicationFrame{
 
 		
 
-		this.tempPeltier.setMaximumItemCount(50);
-		this.tempDHT.setMaximumItemCount(50);
-		this.tempOutside.setMaximumItemCount(50);
-		this.tempDew.setMaximumItemCount(50);
+		this.tempPeltier.setMaximumItemCount(1000);
+		this.tempDHT.setMaximumItemCount(1000);
+		this.tempOutside.setMaximumItemCount(1000);
+		this.tempDew.setMaximumItemCount(1000);
 		
 		return dataset;
 	}

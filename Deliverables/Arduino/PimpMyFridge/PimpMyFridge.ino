@@ -20,7 +20,7 @@
 #define pinTemperaturePeltier 0 // Read the values from the thermistor (Analog !)
 #define pinTemperatureOutside 1 // Read the values from the thermistor (Analog !)
 #define pinFan 5 // Control the fan on that pin (0/1)
-#define pinPeltier 3 // Control the Peltier Module on that pin (PWM !)
+#define pinPeltier 2 // Control the Peltier Module on that pin (PWM !)
 #define pinOnboardLED 13 // Onboard LED
 #define pinOpenDetectorReceiver 7 // Pin to detect whether door is open or not
 #define pinOpenDetectorEmitter 8
@@ -95,8 +95,10 @@ void loop()
   readSensors(); // Read values from sensors
   getAtmoDewpoint();
   delay(500);
+
   sendSerialData();
-  actionableIntelligence();
+
+    actionableIntelligence();
   //Serial.print("String : ");
   //Serial.println(Target);
 
@@ -191,40 +193,32 @@ void readSerialData()
 void actionableIntelligence()
 {
   float differenceOfTemperature = peltierTemperature - targetTemperature;
-  float pourcentError = (5 / 100) * targetTemperature;
+  if (differenceOfTemperature > 0) {
+    //Temperature trop elevee
+    //Refroidir
+    digitalWrite(pinPeltier, HIGH);
+    Serial.print("[ArduinoOutput] Too hot. Starting cooling. ");
+    Serial.print("Current Internal Temperature (");
+    Serial.print(peltierTemperature);
+    Serial.print(" C) is above the target temperature (");
+    Serial.print(targetTemperature);
+    Serial.println(" C).");
+    //Serial.println();
 
-  if (abs(pourcentError) < abs(differenceOfTemperature)) {
-    if (pourcentError < differenceOfTemperature) {
-      //Temperature trop elevee
-      //Refroidir
-      digitalWrite(pinPeltier, HIGH);
-      Serial.print("[ArduinoOutput] Too hot. Starting cooling. ");
-      Serial.print("Current Internal Temperature (");
-      Serial.print(DHT_Temperature);
-      Serial.print(" C) is above the target temperature (");
-      Serial.print(targetTemperature);
-      Serial.println(" C).");
-      //Serial.println();
-
-
-
-    }
-    else if (pourcentError > differenceOfTemperature) {
-      //Temperature trop basse
-      //Couper alim
-      digitalWrite(pinPeltier, LOW);
-      Serial.print("[ArduinoOutput] Too cold. Stopping cooling. ");
-      Serial.print("Current Internal Temperature (");
-      Serial.print(DHT_Temperature);
-      Serial.print(" C) is below the target temperature (");
-      Serial.print(targetTemperature);
-      Serial.println(" C).");
-      //Serial.println();
-    }
   }
-  else if (abs(pourcentError) > abs(differenceOfTemperature)) {
-    //Don't touch it bro all is right
+  else if (differenceOfTemperature < -0.5) {
+    //Temperature trop basse
+    //Couper alim
+    digitalWrite(pinPeltier, LOW);
+    Serial.print("[ArduinoOutput] Too cold. Stopping cooling. ");
+    Serial.print("Current Internal Temperature (");
+    Serial.print(peltierTemperature);
+    Serial.print(" C) is below the target temperature (");
+    Serial.print(targetTemperature);
+    Serial.println(" C).");
+    //Serial.println();
   }
+
 }
 
 
@@ -232,7 +226,6 @@ void actionableIntelligence()
 // NOK
 double getAtmoDewpoint()
 {
-  //double Tr = ((237.7)*(((17.27*DHT_Temperature)/(237.7+DHT_Temperature))+log(DHT_Humidity*0.001)))/((17.27)*(((17.27*DHT_Temperature)/(17.27+DHT_Temperature))+log(DHT_Humidity*0.001)));
   double Tr = (237.7 * (((17.27 * DHT_Temperature) / (237.7 + DHT_Temperature)) + log(DHT_Humidity / 100))) / (17.27 - (((17.27 * DHT_Temperature) / (237.7 + DHT_Temperature)) + log(DHT_Humidity / 100)));
   return Tr;
 }
